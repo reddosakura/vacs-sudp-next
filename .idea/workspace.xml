@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a1b08d13-db4f-4b7b-be79-39b3dfd6a7eb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vacs-sudp-next.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/auth/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/auth/auth_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/processing/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/processing/processing_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/requests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/requests/request_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/users/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/users/users_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/bootstrap/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/Golos_Text.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/siderbar.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/test.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/Golos Text-81ae92755cbe357d1c5d90df5aa15055.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/Golos Text-92e4d6c6de45b3bbbe9795aeb97db3fa.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/Golos Text-d94df6e972dc500f7ad3bf05117fc32d.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/fonts/Golos Text-e47b1f5f2985387efddcec5c0827e554.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/cursor.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/pointer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/policlinica.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/user-icon-role.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/user-icon-role.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/img/users_icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/jquery/jquery.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/add-car-subform.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/add-visitor-subform.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/sidebar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_car_element.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_request_list_card.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_sidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_user_card.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_visitor_element.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/auth.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/passages.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/processing.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/report.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/request_creation.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/sidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/users.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utills/Row.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utills/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utills/enums.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utills/utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Flask Main" />
+        <option value="JavaScript File" />
+        <option value="Python Script" />
+        <option value="CSS File" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2uFuAkxBOVHVlKG7glSJF3mjEYg" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Flask server.vacs-sudp-next.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/alexa/PycharmProjects/vacs-sudp-next/static/img",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\img" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\jquery" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\utills" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\templates\pages" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\css" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\js" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\templates" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\templates\inc" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="vacs-sudp-next" type="Python.FlaskServer">
+      <option name="flaskDebug" value="true" />
+      <module name="vacs-sudp-next" />
+      <option name="target" value="$PROJECT_DIR$/app.py" />
+      <option name="targetType" value="PATH" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (vacs-sudp-next)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-PY-243.24978.54" />
+        <option value="bundled-python-sdk-91e3b7efe1d4-466328ff949b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.24978.54" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a1b08d13-db4f-4b7b-be79-39b3dfd6a7eb" name="Changes" comment="" />
+      <created>1741856501416</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741856501416</updated>
+      <workItem from="1741856502574" duration="4237000" />
+      <workItem from="1741865816191" duration="23587000" />
+      <workItem from="1741929923682" duration="10427000" />
+      <workItem from="1742113563378" duration="9078000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/vacs_sudp_next$vacs_sudp_next.coverage" NAME="vacs-sudp-next Coverage Results" MODIFIED="1742126327083" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

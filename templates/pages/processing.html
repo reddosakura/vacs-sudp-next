@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="flex-fill d-flex gap-2 pt-2 pb-2">
+        {% include 'inc/_sidebar.html' %}
+        <div class="flex-fill d-flex flex-column gap-2" style="border-radius: .5em;font-size: calc((1vw + 1vh) * 0.7);">
+            <div class="d-flex flex-column p-2 align-items-center justify-content-center border border-2" style="height: 5%;border-radius: .5em;">
+{#                <div class="form-check form-switch d-flex gap-2 align-items-center justify-content-center">#}
+{#                    <input id="mode-switcher" type="checkbox" class="chip form-check-input" style="--bs-body-bg: #ffb6dd;height: 1.4em;width: 2.5em;">#}
+{#                    <label for="mode-switcher" style="font-weight: bold;">Переключить на рассмотрение</label>#}
+{#                </div>#}
+                <div class="form-switch chip d-flex justify-content-center">
+                    <div class="centrize">
+                        <div class="d-flex gap-3 align-items-center">
+                            {% if checked_state %}
+                                    <input onclick="switchCheck()" class="m-1 form-check-input" type="checkbox" role="switch" id="switch_check" name="switch_check" checked>
+                            {% else %}
+                                    <input onclick="switchCheck()" class="m-1 form-check-input" type="checkbox" role="switch" id="switch_check" name="switch_check">
+                            {% endif %}
+                                 <label for="switch_check" style="font-weight: bold;">Переключить на рассмотрение</label>
+{#                            <label for="switch_check" class="text-i anime" >{{ mode }}</label>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border border-2 p-2 overflow-auto" style="height: 95%;max-height: 100vh;border-radius: .5em;">
+                <div><span style="font-weight: bold;font-size: calc((1vw + 1vh) * 0.9);background: #ffffff;color: #98B3F9;">Согласование</span></div>
+                {% for card in range(10) %}
+                	{% include 'inc/_request_list_card.html' %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="flex-fill border border-2 me-2 d-flex flex-column gap-2 anime" style="border-radius: .5em;width: 55%;">
+            <div class="d-flex align-items-center justify-content-end pe-2" style="height: 5%;">
+                <p class="m-0 p-0" style="font-size: 25px;font-weight: bold;color: rgb(212,212,212);">Заявка №1</p>
+            </div>
+            <div class="flex-grow-1 d-flex gap-2" style="height: 28%;">
+                <div class="flex-grow-1 p-2 d-flex flex-column gap-2" style="width: 50%;">
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ЗАЯВИТЕЛЬ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ТИП ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                </div>
+                <div class="flex-grow-1 p-2 d-flex flex-column gap-2" style="width: 50%;">
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДАТА И ВРЕМЯ СОЗДАНИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grow-1 d-flex p-2 gap-2" style="height: 28%;">
+                <div class="border-0 shadow flex-grow-1 rounded-3 d-flex flex-column" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
+                    <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 95%;max-height: 90vh;">
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ИВАНОВИЧ</span></div>
+                    </div>
+                </div>
+                <div class="border rounded border-0 shadow flex-grow-1 rounded-3 d-flex flex-column p-2" style="width: 50%;"><span class="fw-semibold" style="text-align: left;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">КОММЕНТАРИЙ ЗАЯВИТЕЛЯ</span>
+                    <div class="flex-fill d-flex overflow-auto" style="max-height: 90vh;">
+                        <p class="flex-fill p-0 m-0">Lorem ipsum odor amet, consectetuer adipiscing elit. Vestibulum praesent maecenas ut conubia leo suscipit finibus. Facilisis porttitor suscipit consequat etiam platea scelerisque augue. Quam congue justo nulla; ornare cras inceptos. Venenatis ridiculus dignissim tempus elementum lobortis rhoncus aptent. Odio orci neque, euismod molestie euismod quis finibus consectetur. Lectus aliquet massa imperdiet praesent egestas sem enim proin. Morbi nunc faucibus interdum risus rutrum vel.<br><br>Maximus phasellus nascetur rutrum metus, inceptos ridiculus interdum fames. Volutpat aenean lacus varius potenti penatibus inceptos. Suscipit class facilisis blandit laoreet condimentum tortor erat est. Facilisi dictum blandit tristique venenatis ante risus. Sed lorem per feugiat senectus; phasellus consequat sed phasellus risus. Eleifend montes dictum pharetra mattis ridiculus integer. Nisl pharetra proin cras lobortis augue vestibulum bibendum. Etiam proin risus dapibus proin; eros egestas vivamus. Rhoncus volutpat aptent ultrices duis tempus facilisi tristique tortor.<br><br>Congue donec consequat conubia vivamus auctor dolor duis nisi. Faucibus habitant mi, tempor per etiam nunc finibus maximus! Ornare integer mi facilisi eu ut magna. Nostra finibus eget dapibus curabitur ultrices posuere nam rutrum nisl. Ex porttitor torquent praesent class, scelerisque vehicula inceptos. Rhoncus ut eros vulputate risus pretium taciti. Sollicitudin nulla tortor sociosqu nunc morbi laoreet. Aliquet scelerisque finibus feugiat feugiat turpis tellus.<br><br>Tellus convallis torquent vestibulum gravida, nam ut. Dictumst ornare vehicula inceptos sollicitudin vel imperdiet orci. Congue platea feugiat ut in; potenti litora nisl faucibus. Magna placerat nibh nunc phasellus dapibus massa. Turpis risus platea auctor lacinia platea sit dolor ipsum nisi. Massa euismod vel arcu elit, montes euismod. Nunc odio accumsan; faucibus eget ex ligula ligula? Pulvinar nisi vel velit nascetur libero proin.<br><br>Imperdiet ut non justo; id class varius velit. Elementum aliquam maximus dignissim orci justo quam per metus. Aliquam nunc velit enim dictumst posuere efficitur. Fermentum massa placerat volutpat sit malesuada commodo ultrices auctor. Nascetur non aliquam cursus viverra feugiat commodo. Imperdiet id imperdiet tristique blandit mi nisl. Efficitur arcu taciti rutrum consectetur maximus justo.<br><br>Vehicula class diam ligula dapibus; laoreet vitae vitae mus. Luctus consectetur quam leo tincidunt, sagittis diam. Nostra lacinia justo quis nisi, convallis libero nascetur nostra. Id rutrum malesuada nisl vehicula torquent massa libero nisl. Molestie urna cursus dis mattis lacus, quis elit suspendisse. Diam ridiculus tristique tristique efficitur euismod sem platea ullamcorper. Ultricies per cursus duis lorem erat neque vulputate nam. Feugiat dapibus maximus mus nec nam erat aenean. Enim placerat lacus id magnis scelerisque urna.<br><br>Aliquam at efficitur bibendum natoque nostra montes gravida. Eu ullamcorper consectetur neque bibendum habitant purus commodo senectus. Consequat fermentum odio enim aptent finibus suspendisse arcu mus laoreet. Consectetur justo dictumst auctor, diam cubilia molestie elementum. Augue netus justo quis cursus accumsan. Sagittis cursus tincidunt orci dui a consequat lorem sed proin. Et eleifend adipiscing odio potenti orci ultricies. Conubia parturient ornare cubilia scelerisque laoreet quisque vulputate viverra duis.<br><br>Sapien posuere orci nisi per efficitur platea. Curae imperdiet rhoncus velit ut praesent? Porttitor feugiat magnis tristique tristique porttitor nisi senectus. Quis imperdiet eleifend vestibulum netus semper quisque. Curabitur duis vel platea ultrices praesent ultricies. Auctor parturient felis sapien lorem aliquet interdum facilisi. Elementum dictum consectetur viverra urna ex. Semper nisi dui egestas facilisi nisl ex tristique. Aenean praesent viverra at fermentum risus et risus velit himenaeos. Montes lectus donec etiam curae suspendisse amet.<br><br>Taciti libero tristique commodo curabitur iaculis aenean, class purus. Dapibus mus lectus praesent nec fermentum parturient dolor? Pulvinar inceptos ridiculus nec magna class felis augue tempor. Class habitasse praesent parturient auctor ut proin odio amet hac. Cursus porta facilisi suscipit erat ullamcorper tristique inceptos adipiscing arcu. Vivamus aenean vivamus dolor nisl efficitur potenti ac conubia conubia. Curabitur sit maecenas feugiat nam quam parturient. Auctor netus sociosqu, in aptent commodo purus. Pulvinar curabitur amet at congue, donec iaculis ullamcorper velit urna.<br><br>Proin arcu penatibus nulla; dis diam adipiscing. Litora justo gravida sociosqu quis sed odio. Torquent nibh ex nascetur parturient pretium cubilia convallis posuere. Suscipit pharetra tincidunt nec ornare velit ligula; pretium eros. Praesent placerat hendrerit fames integer hac tincidunt sit. Nullam faucibus metus augue auctor ante.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grow-1 d-flex p-2 gap-2" style="height: 28%;">
+                <div class="border-0 shadow flex-grow-1 rounded-3 d-flex flex-column" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
+                    <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 95%;max-height: 90vh;">
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                        <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777АА77</span></div>
+                            <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border rounded border-0 shadow flex-grow-1 rounded-3 d-flex flex-column p-2" style="width: 50%;"><span class="fw-semibold" style="text-align: left;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">НАПИСАТЬ КОММЕНТАРИЙ</span>
+                    <div class="flex-fill d-flex overflow-auto" style="max-height: 90vh;"><textarea class="flex-fill p-0 m-0" style="resize: none"></textarea></div>
+                </div>
+            </div>
+            <div class="d-flex" style="height: 10%;">
+                <div class="flex-fill d-flex p-3 align-items-center gap-2" style="width: 50%;">
+                    <div class="d-flex align-items-center justify-content-center border rounded-3" style="width: 2.5rem;height: 2.5rem;background: #678aff;" data-bs-target="#file-modal" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark" style="font-size: 1.5rem;color: var(--bs-body-bg);">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>
+                        </svg></div><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>
+                </div>
+                <form class="flex-fill d-flex align-items-center justify-content-between p-2" style="width: 50%;"><input class="btn border-0 btn-primary" type="submit" value="СОГЛАСОВАТЬ" style="background: #fbf894;color: rgb(0,0,0);font-weight: bold;"><input class="btn border-0 btn-primary" type="submit" value="УТВЕРДИТЬ" style="background: #94fbb1;color: rgb(0,0,0);font-weight: bold;"><input class="btn border-0 btn-primary" type="submit" value="ОТКЛОНИТЬ" style="background: #f69595;color: rgb(0,0,0);font-weight: bold;"></form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-xl" role="dialog" tabindex="-1" id="file-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="font-size: 18px;font-weight: bold;color: #d4d4d4;">ПРОСМОТР ФАЙЛОВ</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="carousel slide" data-bs-ride="false" id="carousel-1">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active"><img class="w-100 d-block" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" alt="Slide Image"></div>
+                        </div>
+                        <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span></a></div>
+                        <div class="carousel-indicators"><button type="button" data-bs-target="#carousel-1" data-bs-slide-to="0" class="active"></button> <button type="button" data-bs-target="#carousel-1" data-bs-slide-to="1"></button> <button type="button" data-bs-target="#carousel-1" data-bs-slide-to="2"></button> <button type="button" data-bs-target="#carousel-1" data-bs-slide-to="3"></button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

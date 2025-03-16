@@ -1,0 +1,83 @@
+.anime {
+    animation: slideInOut .65s ease-in;
+}
+
+
+@keyframes slideInOut {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.chip .form-check-input {
+    /* --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%152, 179, 249, 1.0%29'/%3e%3c/svg%3e"); */
+    /*height: 2em;*/
+    /*width: 3.65em;*/
+    background-color: #E3BCF1;
+    /*border: solid black 0.2em;*/
+    transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),
+                background-color 0.45s cubic-bezier(.72,.16,.24,.62);
+
+}
+
+.chip .form-check-input:checked {
+    background-color: #BCCEF1;
+    /*transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),*/
+    /*background-color 0.45s cubic-bezier(.72,.16,.24,.62);*/
+    transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),
+                background-color 0.45s cubic-bezier(.72,.16,.24,.62);
+    /* transition: all 0.55s cubic-bezier(.72,.16,.24,.62); */
+}
+
+.form-switch {
+  padding-left: 2.5em;
+}
+.form-switch .form-check-input {
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  width: 3em;
+    height: 1.5em;
+  margin-left: -2.5em;
+  background-image: var(--bs-form-switch-bg);
+  background-position: left center;
+  /*border-radius: 2em;*/
+    transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),
+                background-color 0.45s cubic-bezier(.72,.16,.24,.62);
+}
+
+.form-switch .form-check-input:focus {
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2386b7fe'/%3e%3c/svg%3e");
+    border: none;
+}
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  border: none;
+}
+.form-switch.form-check-reverse {
+  padding-right: 2.5em;
+  padding-left: 0;
+}
+.form-switch.form-check-reverse .form-check-input {
+  margin-right: -2.5em;
+  margin-left: 0;
+}
+
+
+/*html, * {*/
+/*    cursor: none;*/
+/*    !* just change the cursor.ico path to your location *!*/
+/*}*/
+
+
+
+.cursor-pointer {
+    cursor: pointer;
+}

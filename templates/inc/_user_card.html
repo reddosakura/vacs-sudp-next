@@ -1,0 +1,30 @@
+
+{% if role["name"] =="Суперпользователь" %}
+    {% set color = "#E3BCF1" %}
+{% elif role["name"] == "Администратор" %}
+    {% set color = "#BCCEF1" %}
+{% elif role["name"] == "Ограниченное администрирование" %}
+    {% set color = "#BCF1E1" %}
+{% elif role["name"] == "Заявитель" %}
+    {% set color = "#F0F1BC" %}
+{% elif role["name"] == "Охрана" %}
+    {% set color = "#F1C9BC" %}
+{% endif %}
+
+<div class="user-card border-0 shadow d-flex flex-column gap-3 p-3 border rounded-4 justify-content-center" style="height: 27%;width: 40%;">
+    <div>
+        <p class="text-uppercase p-0 m-0 lnp" style="font-size: calc((1vh + 1vw) * 0.9);font-weight: bold;">{{ lastname }} {{ name }} {{ patronymic if patronymic else '' }}</p>
+    </div>
+    <div class="d-flex">
+        <div class="d-flex flex-fill gap-2">
+            <div class="d-flex align-items-center justify-content-center">
+                <img class="p-1" src="{{ url_for('static', filename='img/user-icon-role.svg') }}" style="max-height: 7.5vh;background: {{ color }};border-radius: .3em;">
+            </div>
+            <div class="d-flex flex-column">
+                <span class="text-break text-uppercase p-0 m0 spec" style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 500;color: #d4d4d4;">{{ speciality }}</span>
+                <span class="text-break text-uppercase p-0 m0" style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 500;color: #d4d4d4;">{{ role['name'] }}</span>
+            </div>
+        </div>
+        <div class="text-uppercase d-flex align-items-center justify-content-endflex-fill"><button class="btn text-uppercase rounded1" type="button" style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;background: {{ color }};">Редактировать</button></div>
+    </div>
+</div>

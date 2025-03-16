@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  font-family: 'Golos Text';
+  display: flex;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(.41,.39,.43,.71);
+}
+
+.sidebar .icon {
+  font-size: 2.75vw;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar .text {
+  margin-left: 10px;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(.41,.39,.43,.71);
+  color: #D4D4D4;
+  font-weight: 600;
+  font-size: calc((1vh + 1vw) * 0.55);
+}
+
+#sidebar:hover .text {
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(.41,.39,.43,.71);
+}
+
+#sidebar {
+  width: 5%;
+  transition: width .4s cubic-bezier(.41,.39,.43,.71);
+  overflow: hidden;
+}
+
+#sidebar:hover {
+  width: 15%;
+}
+
+li:hover svg {
+  background-color: #678bff;
+  border-color: #678bff;
+  border-width: 0;
+  transition: all .4s cubic-bezier(.41,.39,.43,.71);
+}
+
+li:hover path {
+  color: white;
+}
+
+li:hover .text {
+  color: #678bff;
+}
+
+.reques-mini-card:hover {
+  background-color: #E8EDFD;
+}
+

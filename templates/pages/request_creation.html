@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<div class="flex-fill d-flex gap-2 pt-2 pb-2 pe-2">
+    {% include 'inc/_sidebar.html' %}
+        <form class="flex-fill d-flex" method="post">
+            {{ form.csrf_token }}
+            <div class="d-flex flex-fill flex-column p-2 border border-2 rounded-3">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div class=flashes>
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }} alert-dismissible" role="alert"><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="alert"></button><span>{{ message }}</span></div>
+                    {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+                <div style="height: 10%;"></div>
+                <div class="d-flex gap-4" style="height: 90%;">
+                    <div class="col d-flex flex-column gap-3">
+                        <div class="flex-fill d-flex flex-column gap-2" style="height: 50%;">
+                            <div class="d-flex add-visitor-subform" style="height: 10%;"><button class="btn btn-primary fw-semibold border-0 flex-fill" type="button" style="background: #678aff;">+ ДОБАВИТЬ ПОСЕТИТЕЛЯ</button></div>
+                            <div id="visitors_list_container" class="d-flex flex-column gap-2 p-2 overflow-auto shadow rounded-3" style="height: 90%;max-height: 35vh;">
+
+                            </div>
+                        </div>
+                        <div class="flex-fill d-flex flex-column gap-2" style="height: 50%;">
+                            <div class="d-flex add-car-subform" style="height: 10%;"><button class="btn btn-primary fw-semibold border-0 flex-fill" type="button" style="background: #678aff;">+ ДОБАВИТЬ АВТОМОБИЛЬ</button></div>
+                            <div id="cars_list_container" class="overflow-auto d-flex flex-column gap2 p-2 shadow rounded-3" style="height: 90%;max-height: 35vh;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-flex flex-column gap-2">
+                        <div class="d-flex flex-fill gap-2" style="height: 10%;">
+                            <div class="col">
+                                <div>
+                                    <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ОРГАНИЗАЦИЯ</span>
+                                    {{ form.organization(class_="border-2 form-control") }}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div>
+                                    <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ДОГОВОР</span>
+                                    {{ form.contract(class_="border-2 form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-fill gap-2" style="height: 40%;">
+                            <div class="col d-flex flex-column">
+                                <div class="flex-fill"><span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ТИП ЗАЯВКИ</span>
+                                    <div class="d-flex">
+                                        {% for field in form.type %}
+                                            {% if loop.first %}
+                                                <div class="flex-fill d-flex align-items-center justify-content-center">
+                                                    {{ field(class_="btn-check", checked="") }}
+                                                    {{ field.label(class_="btn flex-fill", style="font-size: calc((1vw + 1vh) * 0.7);font-weight: 500;") }}
+                                                </div>
+                                            {% else %}
+                                                <div class="flex-fill d-flex align-items-center justify-content-center">
+                                                    {{ field(class_="btn-check") }}
+                                                    {{ field.label(class_="btn flex-fill", style="font-size: calc((1vw + 1vh) * 0.7);font-weight: 500;") }}
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                                <div class="flex-fill">
+                                    <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ВРЕМЕННОЙ ИНТЕРВАЛ</span>
+                                    {{ form.time_interval(class_="border-2 form-select") }}
+                                </div>
+                                <div class="flex-fill"><span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</span>
+                                    {{ form.passage_mode(class_="border-2 form-select") }}
+                                </div>
+                            </div>
+                            <div class="col d-flex flex-column">
+                                <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">КОММЕНТАРИЙ</span>
+                                {{ form.comment(class_="border-2 form-control flex-fill overflow-auto", style="resize: none;") }}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-fill gap-2" style="height: 10%;">
+                            <div class="col">
+                                <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">С ДАТЫ</span>
+                                {{ form.from_date(class_="border-2 form-control") }}
+                            </div>
+                            <div class="col">
+                                <span class="fw-semibold" style="font-size: calc((1vh + 1vw) * 0.6);color: #d4d4d4;">ПО ДАТУ</span>
+                                {{ form.to_date(class_="border-2 form-control") }}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-fill gap-2" style="height: 40%;">
+                            <div class="col"></div>
+                            <div class="col d-flex align-items-end justify-content-end">
+                                {{ form.create_btn(class_="btn border-0 btn-primary flex-fill", style="font-size: calc((1vh + 1vw) * 1.25);font-weight: 500;background: #678aff;", disabled=blocked) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block additional_scripts_end %}
+	<script src="{{ url_for('static', filename='js/add-visitor-subform.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/add-car-subform.js') }}"></script>
+{% endblock %}
