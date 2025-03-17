@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
+{% block additional_scripts_head %}
+    <script src="{{ url_for('static', filename='/jquery/jquery.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.0.1/mammoth.browser.min.js"></script>
+{% endblock %}
+
 {% block main %}
 	<div class="flex-fill d-flex gap-2 pt-2 pb-2 pe-2">
     {% include 'inc/_sidebar.html' %}
-        <form class="flex-fill d-flex" method="post">
+        <form class="flex-fill d-flex" method="post" onsubmit="validateForm()">
             {{ form.csrf_token }}
             <div class="d-flex flex-fill flex-column p-2 border border-2 rounded-3">
+
                 {% with messages = get_flashed_messages(with_categories=true) %}
                   {% if messages %}
                     <div class=flashes>
@@ -15,7 +21,26 @@
                     </div>
                   {% endif %}
                 {% endwith %}
-                <div style="height: 10%;"></div>
+                <div class="d-flex" style="height: 10%;">
+                    <div class="flex-fill d-flex align-items-center gap-2">
+{#                        <p class="p-0 m-0" style="font-size: .75rem;"><strong>ЗАПОЛНИТЬ СПИСКИ ПОСЕТИТЕЛЕЙ И АВТОТРАНСПОРТА </strong><br /><strong>ИЗ ШАБЛОНА MICROSOFT WORD</strong></p>#}
+                        <label class="input-file d-flex align-content-center gap-2" for="docxFileInput">
+                            <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 3em;height: 3em;background: #678aff;"><svg class="bi bi-file-earmark m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1.5em;height: 1.5em;">
+                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>
+                            </svg></div>
+
+                            <input class="rounded-4 regular-btn" multiple type="file" accept=".doc, .docx" id="docxFileInput">
+                             <p class="p-0 m-0 align-content-center" style="font-size: .75rem;"><strong>ЗАПОЛНИТЬ СПИСКИ ПОСЕТИТЕЛЕЙ И АВТОТРАНСПОРТА </strong><br /><strong>ИЗ ШАБЛОНА MICROSOFT WORD</strong></p>
+                        </label>
+                    </div>
+                    <div class="flex-fill d-flex align-items-center gap-2">
+                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 3em;height: 3em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1.5em;height: 1.5em;">
+                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
+                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
+                            </svg></div>
+                        <p class="p-0 m-0" style="font-size: .75rem;"><strong>СОЗДАТЬ ЗАЯВКУ НА ОСНОВЕ СУЩЕСТВУЮЩЕЙ</strong></p>
+                    </div>
+                </div>
                 <div class="d-flex gap-4" style="height: 90%;">
                     <div class="col d-flex flex-column gap-3">
                         <div class="flex-fill d-flex flex-column gap-2" style="height: 50%;">
@@ -91,7 +116,20 @@
                             </div>
                         </div>
                         <div class="d-flex flex-fill gap-2" style="height: 40%;">
-                            <div class="col"></div>
+                            <div class="col d-flex flex-column align-content-between">
+
+                                <div class="shadow flex-fill d-flex flex-column p-2 rounded-3 gap-2">
+                                    <div id="files-block" class="flex-fill flex-column overflow-auto p-2" style="max-height: 25vh;height: 25vh;">
+
+                                    </div>
+                                    <div class="d-flex justify-content-center p-2 rounded-2" style="color:white;font-size:calc((1vh + 1vw) * 0.8);font-weight:500;background:#678aff;">
+                                        <label class="input-file d-flex align-content-center text-center">
+                                            {{ form.add_files_btn(class_="border-2") }}
+                                             <span class="input-file-btn">ВЫБРАТЬ ФАЙЛЫ</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col d-flex align-items-end justify-content-end">
                                 {{ form.create_btn(class_="btn border-0 btn-primary flex-fill", style="font-size: calc((1vh + 1vw) * 1.25);font-weight: 500;background: #678aff;", disabled=blocked) }}
                             </div>
@@ -106,4 +144,144 @@
 {% block additional_scripts_end %}
 	<script src="{{ url_for('static', filename='js/add-visitor-subform.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/add-car-subform.js') }}"></script>
+	<script type="module">
+    document.getElementById('docxFileInput').addEventListener('change', function (event) {
+  const file = event.target.files[0]
+  console.log(' - Получение файла')
+  if (file) {
+    const reader = new FileReader()
+    console.log(' - Чтение файла')
+    reader.onload = function (e) {
+      mammoth.convertToHtml({ arrayBuffer: e.target.result })
+        .then(result => {
+          console.log(' - Инициализация парсера')
+          const contents = result.value
+          const parser = new DOMParser()
+          const docxDocument = parser.parseFromString(contents, 'text/html')
+          const tables = docxDocument.querySelectorAll('table')
+
+          const allVisitorsFieldWrapper = document.getElementById('visitors_list_container')
+          console.log(' - Получение контейнера посетителей')
+          const allVisitors = allVisitorsFieldWrapper.getElementsByTagName('input')
+
+          let newName = `${allVisitors.length / 4}`
+
+          console.log(' - Создание индексов')
+          if (allVisitors.length > 0) {
+            const visitorsInputIds = []
+            for (let j = 0; j < allVisitors.length; j++) {
+              visitorsInputIds.push(parseInt(allVisitors[j].id.split('-')[1]))
+            }
+            newName = Math.max(...visitorsInputIds.filter((number) => !isNaN(number))) + 1
+          }
+
+          for (let i = 0; i < tables.length; i++) {
+            const tableBody = tables[i].querySelector('tbody')
+            const tableHeader = tableBody.firstChild.textContent.replace(' ', '')
+
+            if (tableHeader === 'ФамилияИмяОтчество') {
+              console.log(' - Обнаружена таблица с посетителями')
+              const rows = Array.from(tableBody.rows).splice(1)
+              console.log(' - Выгрузка данных')
+              for (let j = 0; j < rows.length; j++) {
+                const cells = rows[j].cells
+                const lastname = cells[0].textContent
+                const name = cells[1].textContent
+                const patronymic = cells[2].textContent
+                const html = `<div class="visitor-subform border-2 shadow d-flex p-3 gap-2 rounded-3"><input id=visitors_list-${newName}-lastname value="${lastname}" name=visitors_list-${newName}-lastname class="form-control" type="text" placeholder="ФАМИЛИЯ" style="font-weight: 600;" /><input class="form-control" type="text" id=visitors_list-${newName}-name value="${name}" name=visitors_list-${newName}-name placeholder="ИМЯ" style="font-weight: 600;" /><input class="form-control" type="text" id=visitors_list-${newName}-patronymic value="${patronymic}" name=visitors_list-${newName}-patronymic placeholder="ОТЧЕСТВО" style="font-weight: 600;" /><button class="btn btn-primary border-0 remove-visitor-subform" type="button" style="background: #FF9A9A;font-size: calc((1vw + 1vh) * 0.6);">УДАЛИТЬ</button></div>`
+                $('#visitors_list_container').append(html)
+                newName++
+              }
+              console.log(' - Выгрузка завершена')
+            } else if (tableHeader === 'ФамилияИмяОтчествоМаркаавтомобиляНомер автомобиля') {
+              console.log(' - Обнаружена таблица с посетителями и автотранспортом')
+              const rows = Array.from(tableBody.rows).splice(1)
+              console.log(' - Выгрузка данных')
+              for (let j = 0; j < rows.length; j++) {
+                const cells = rows[j].cells
+                const lastname = cells[0].textContent
+                const name = cells[1].textContent
+                const patronymic = cells[2].textContent
+
+                const carModel = cells[3].textContent
+                const governNum = cells[4].textContent
+
+                const htmlV = `<div class="visitor-subform border-2 shadow d-flex p-3 gap-2 rounded-3"><input id=visitors_list-${newName}-lastname value="${lastname}" name=visitors_list-${newName}-lastname class="form-control" type="text" placeholder="ФАМИЛИЯ" style="font-weight: 600;" /><input class="form-control" type="text" id=visitors_list-${newName}-name value="${name}" name=visitors_list-${newName}-name placeholder="ИМЯ" style="font-weight: 600;" /><input class="form-control" type="text" id=visitors_list-${newName}-patronymic value="${patronymic}" name=visitors_list-${newName}-patronymic placeholder="ОТЧЕСТВО" style="font-weight: 600;" /><button class="btn btn-primary border-0 remove-visitor-subform" type="button" style="background: #FF9A9A;font-size: calc((1vw + 1vh) * 0.6);">УДАЛИТЬ</button></div>`
+                $('#visitors_list_container').append(htmlV)
+
+                const html = `<div class="car-subform border-2 shadow d-flex p-3 gap-2 rounded-3"><input id="cars_list-${newName}-govern_num" value="${governNum}" name="cars_list-${newName}-govern_num" class="form-control" type="text" placeholder="ГОС. НОМЕР" style="font-weight: 600;" /><input class="form-control" id="cars_list-${newName}-carmodel" value="${carModel}" name="cars_list-${newName}-carmodel" type="text" placeholder="МОДЕЛЬ" style="font-weight: 600;" /><button class="remove-car-subform btn btn-primary border-0" type="button" style="background: #FF9A9A;font-size: calc((1vw + 1vh) * 0.6);">УДАЛИТЬ</button></div>`
+                $('#cars_list_container').append(html)
+                newName++
+              }
+              console.log(' - Выгрузка завершена')
+            } else if (tableHeader === 'МаркаавтомобиляНомер автомобиля') {
+              console.log(' - Обнаружена таблица с посетителями и автотранспортом')
+              const rows = Array.from(tableBody.rows).splice(1)
+              console.log(' - Выгрузка данных')
+              for (let j = 0; j < rows.length; j++) {
+                const cells = rows[j].cells
+                const carModel = cells[0].textContent
+                const governNum = cells[1].textContent
+
+                const html = `<div class="car-subform border-2 shadow d-flex p-3 gap-2 rounded-3"><input id="cars_list-${newName}-govern_num" value="${governNum}" name="cars_list-${newName}-govern_num" class="form-control" type="text" placeholder="ГОС. НОМЕР" style="font-weight: 600;" /><input class="form-control" id="cars_list-${newName}-carmodel" value="${carModel}" name="cars_list-${newName}-carmodel" type="text" placeholder="МОДЕЛЬ" style="font-weight: 600;" /><button class="remove-car-subform btn btn-primary border-0" type="button" style="background: #FF9A9A;font-size: calc((1vw + 1vh) * 0.6);">УДАЛИТЬ</button></div>`
+                $('#cars_list_container').append(html)
+                newName++
+              }
+              console.log(' - Выгрузка завершена')
+            }
+
+            document.getElementById('docxFileInput').value = null
+          }
+        })
+    }
+    reader.readAsArrayBuffer(file)
+  }
+})
+
+
+    </script>
+
+    <script>
+
+        function validateForm() {
+            try {
+              let allVisitorsFieldWrapper = document.getElementById('visitors_list_container');
+              let allVisitors = allVisitorsFieldWrapper.getElementsByTagName('input');
+              let allCarsFieldWrapper = document.getElementById('cars_list_container');
+              let allCars = allCarsFieldWrapper.getElementsByTagName('input');
+
+              let from_date = new Date(document.querySelector('#fromdate').value);
+              const to_date =  new Date(document.querySelector('#todate').value);
+
+              if (from_date > to_date) {
+                $('#dateValidationErrorModal').modal('show');
+                return false;
+              }
+
+              if (allVisitors.length === 0 && allCars.length === 0) {
+                $('#validationErrorModal').modal('show');
+                return false;
+              }
+            } catch (e) {
+                console.log(e);
+                return false
+            }
+
+
+        }
+    </script>
+    <script>
+        const fileInput = document.getElementById("add_files_btn");
+
+        fileInput.addEventListener("change", (event) => {
+          const files = event.target.files;
+          let files_block = $('#files-block').empty();
+          for (let i = 0; i < files.length; i++) {
+              //let html = `<div class="file-item container-fluid mh-90 p-2 mt-2 mb-2 rounded-4 text-label"><div class="row"><div class="col d-flex align-content-center"><div class="text-truncate w-100 text-center fs-4">${files[i].name}</div></div></div></div>`;
+              //let html = `<div class="shadow m-1 rounded-2" style="height: 5vh;"></div>`;
+              let html = `<div class="shadow m-1 rounded-2 d-flex align-items-center p-1 d-flex" style="height: 5vh;"><span class="flex-fill text-start">${files[i].name}</span></div>`;
+              files_block.append(html);
+          }
+        });
+    </script>
 {% endblock %}

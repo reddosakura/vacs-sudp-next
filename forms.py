@@ -91,7 +91,7 @@ class RequestForm(FlaskForm):
     visitors_list = FieldList(FormField(VisitorSubForm))
     cars_list = FieldList(FormField(CarSubForm))
 
-    # add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
+    add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
     create_btn = SubmitField('СОЗДАТЬ')
 
 
