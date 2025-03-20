@@ -32,11 +32,12 @@ def login():
                 if auth_response.json()["authenticated"]:
                     role = auth_response.json()["role"]
                     match role:
-                        case "Администратор" | "Ограниченное администрирование": page = "/processing"
+                        case "Администратор": page = "/processing/consider"
+                        case "Ограниченное администрирование": page = "/processing/approval"
                         case "Суперпользователь": page = "/users"
                         case "Заявитель": page = "/requests"
                         case "Охрана": page = "/monitoring"
-                        case _: page = "/requests"
+                        case _: page = "/404"
 
                     res = make_response(redirect(page))
                     res.set_cookie("role", value=generate_password_hash(role))

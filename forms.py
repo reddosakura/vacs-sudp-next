@@ -4,7 +4,7 @@ import wtforms
 # from starlette_wtf import FlaskForm
 from flask_wtf import FlaskForm
 from wtforms.fields.numeric import IntegerField
-from wtforms.fields.simple import StringField, PasswordField, TextAreaField, SubmitField, FileField
+from wtforms.fields.simple import StringField, PasswordField, TextAreaField, SubmitField, FileField, HiddenField
 from wtforms.fields import DateField, MultipleFileField, FormField, FieldList, BooleanField
 from wtforms.fields.choices import SelectField, RadioField
 from wtforms.validators import DataRequired, Optional, Regexp
@@ -57,10 +57,12 @@ class AuthForm(FlaskForm):
 
 
 class ProcessRequestForm(FlaskForm):
-    comment = TextAreaField('comment', render_kw={'data-simplebar': None, 'data-simplebar-auto-hide': False})
-    allow = SubmitField('ОДОБРИТЬ')
+    # comment = TextAreaField('comment', render_kw={'data-simplebar': None, 'data-simplebar-auto-hide': False})
+    comment = TextAreaField('comment')
+    request_id = HiddenField("request_id")
+    allow = SubmitField('УТВЕРДИТЬ')
     deny = SubmitField('ОТКЛОНИТЬ')
-    approve = SubmitField('СОГЛАСУЮ')
+    approve = SubmitField('СОГЛАСОВАТЬ')
 
 
 class VisitorSubForm(wtforms.Form):

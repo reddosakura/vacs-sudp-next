@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask, redirect
 from modules.auth.auth_app import authbp
 from modules.processing.processing_app import procbp
@@ -11,9 +13,20 @@ app.register_blueprint(usersbp, url_prefix='/users')
 app.register_blueprint(reqbp, url_prefix='/requests')
 app.register_blueprint(procbp, url_prefix='/processing')
 
+
+@app.template_filter("datefilter")
+def datetimefilter(strdate, format_):
+    return datetime.fromisoformat(strdate).strftime(format_)
+
+
+@app.template_filter("timefilter")
+def datetimefilter(strdate, format_):
+    return datetime.strptime(strdate, "%H:%M:%S").strftime(format_)
+
 @app.route('/')
 def index():
     return redirect("/auth")
+
 
 if __name__ == '__main__':
     app.run()

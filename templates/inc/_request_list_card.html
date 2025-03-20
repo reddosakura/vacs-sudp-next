@@ -1,3 +1,3 @@
-<div class="d-flex flex-column justify-content-between p-3 mt-2 reques-mini-card anime" style="height: 10vh;box-shadow: 2px 4px 12px rgba(33,37,41,0.25);border-radius: 1em;"><span style="font-size: calc((1vw + 1vh) * 1);font-weight: bold;">Заявка №1</span>
-    <div class="d-flex align-self-auto justify-content-between"><span style="font-size: calc((1vw + 1vh) * 0.6);">Латышев А.Е.</span><span style="font-size: calc((1vw + 1vh) * 0.6);">08:38</span></div>
+<div class="d-flex flex-column justify-content-between p-3 mt-2 reques-mini-card anime" style="height: 10vh;box-shadow: 2px 4px 12px rgba(33,37,41,0.25);border-radius: 1em;" onclick="window.location='/processing/{{ mode }}?id={{ number }}'"><span style="font-size: calc((1vw + 1vh) * 1);font-weight: bold;">Заявка №{{ number }}</span>
+    <div class="d-flex align-self-auto justify-content-between"><span style="font-size: calc((1vw + 1vh) * 0.6);">{{ lastname }} {{ name[0] }}. {{ patronymic[0] + '.' if patronymic else '' }}</span><span style="font-size: calc((1vw + 1vh) * 0.6);">{{ date_created|datefilter("%H:%S") }}</span></div>
 </div>
