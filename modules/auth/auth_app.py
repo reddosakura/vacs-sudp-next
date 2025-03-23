@@ -52,5 +52,5 @@ def login():
             flash('Не удалось подключиться к сервису авторизации')
             return render_template("pages/auth.html", form=form)
 
-    flash('Ошибка')
+    flash('Неверный логин или пароль')
     return render_template("pages/auth.html", form=form)

@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, flash, redirect
+import httpx
+from flask import Blueprint, render_template, flash, redirect, request
 from werkzeug.security import generate_password_hash
 
 from forms import CreateUserForm
@@ -8,36 +9,56 @@ usersbp = Blueprint('users', __name__)
 
 @usersbp.route('/', methods=['GET'])
 def index():
-    users_response = build_request(
-        "http://localhost:3001/api/v3/users?show_deleted=false"
-    )
+    try:
+        user = build_request(
+            f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
+        )
 
-    roles_response = build_request(
-        "http://localhost:3001/api/v3/users/list/roles"
-    )
+        if user.status_code != 200:
+            return redirect("/auth")
 
-    if users_response.status_code == 200 and roles_response.status_code == 200:
-        if users_response.json()["users"]:
-            form = CreateUserForm()
-            form.role.choices = [(role['id'], role['name']) for role in roles_response.json()["roles"]]
-            return render_template(
-                'pages/users.html',
-                users=users_response.json()["users"],
-                # roles=roles_response.json()["roles"],
-                form=form,
-            )
+        users_response = build_request(
+            "http://localhost:3001/api/v3/users?show_deleted=false"
+        )
+
+        roles_response = build_request(
+            "http://localhost:3001/api/v3/users/list/roles"
+        )
+
+        if users_response.status_code == 200 and roles_response.status_code == 200:
+            if users_response.json()["users"]:
+                form = CreateUserForm()
+                form.role.choices = [(role['id'], role['name']) for role in roles_response.json()["roles"]]
+                return render_template(
+                    'pages/users.html',
+                    users=users_response.json()["users"],
+                    user=user.json(),
+                    # roles=roles_response.json()["roles"],
+                    form=form,
+                )
+            else:
+                flash("Пользователи не найдены")
         else:
-            flash("Пользователи не найдены")
-    else:
-        flash(f"User API вернул код - {users_response.status_code}")
+            flash(f"User API вернул код - {users_response.status_code}")
 
 
-    return render_template(
-        'pages/users.html',
-        users = [],
-        # roles = [],
-        form=CreateUserForm()
-    )
+        return render_template(
+            'pages/users.html',
+            users = [],
+            user=user.json(),
+            # roles = [],
+            form=CreateUserForm()
+        )
+    except httpx.ConnectError as e:
+        flash(f"СЕРВИС НЕДОСТУПЕН")
+
+        return render_template(
+            'pages/users.html',
+            users=[],
+            user={"role": {"name": None}},
+            # roles = [],
+            form=CreateUserForm()
+        )
 
 
 @usersbp.route('/', methods=['POST'])

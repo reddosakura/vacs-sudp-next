@@ -1,7 +1,47 @@
+
+:root {
+    --superuser-color: #E3BCF1;
+    --admin-color: #BCCEF1;
+    --limadmin-color: #BCF1E1;
+    --requester-color: #F0F1BC;
+    --security-color: #F1C9BC;
+    --error-color: #E25D5D
+}
+
+
+.superuser-color {
+    background: var(--superuser-color);
+}
+
+
+.admin-color {
+    background: var(--admin-color);
+}
+
+.limadmin-color {
+    background: var(--limadmin-color);
+}
+
+.requester-color {
+    background: var(--requester-color);
+}
+
+.security-color {
+    background: var(--security-color);
+}
+
+.error-color {
+    background: var(--error-color);
+}
+
 .anime {
     animation: slideInOut .65s ease-in;
 }
 
+.error-border {
+    border: .2em solid var(--error-color);
+    border-radius: .3em;
+}
 
 @keyframes slideInOut {
     0% {
@@ -88,4 +128,53 @@
 	display: block;
 	width: 0;
 	height: 0;
+}
+
+.consider {
+
+    box-shadow: 2px 4px 12px rgba(33,37,41,0.25);
+    transition: box-shadow 0.55s cubic-bezier(.72,.16,.24,.62),
+            filter 0.55s cubic-bezier(.72,.16,.24,.62),
+            background-color 0.55s cubic-bezier(.72,.16,.24,.62),
+            transform 0.55s cubic-bezier(.72,.16,.24,.62);
+
+}
+
+.selected-consider {
+    background-color: #f9d6ff;
+    box-shadow: inset -0.5em 0em #E698F9, 2px 4px 12px rgba(33,37,41,0.25);
+}
+
+
+.consider:hover {
+    background-color: #f9d6ff;
+    transition: box-shadow 0.55s cubic-bezier(.72,.16,.24,.62),
+            filter 0.55s cubic-bezier(.72,.16,.24,.62),
+            background-color 0.55s cubic-bezier(.72,.16,.24,.62),
+            transform 0.55s cubic-bezier(.72,.16,.24,.62);
+}
+
+.approval {
+    /*box-shadow: inset -0.7em 0em #dbe4fb;*/
+    box-shadow: 2px 4px 12px rgba(33,37,41,0.25);
+    transition: box-shadow 0.55s cubic-bezier(.72,.16,.24,.62),
+            filter 0.55s cubic-bezier(.72,.16,.24,.62),
+            background-color 0.55s cubic-bezier(.72,.16,.24,.62),
+            transform 0.55s cubic-bezier(.72,.16,.24,.62);
+
+}
+
+
+.approval:hover{
+    background-color: #d7e1fd;
+    transition: box-shadow 0.55s cubic-bezier(.72,.16,.24,.62),
+            filter 0.55s cubic-bezier(.72,.16,.24,.62),
+            background-color 0.55s cubic-bezier(.72,.16,.24,.62),
+            transform 0.55s cubic-bezier(.72,.16,.24,.62);
+
+}
+
+.selected-approval {
+    background-color: #d7e1fd;
+    box-shadow: inset -0.5em 0em #98B3F9, 2px 4px 12px rgba(33,37,41,0.25);
 }

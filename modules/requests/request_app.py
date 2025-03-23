@@ -1,19 +1,31 @@
+import httpx
+from flask import render_template, flash
+# from forms import RequestForm
+# from modules.requests.config import reqbp
+# from utills.utils import build_request
 from datetime import datetime
 
-import httpx
-from flask import Blueprint, render_template, redirect, flash, request
+from flask import flash, redirect, request
 
 from forms import RequestForm, TIME_INTERVALS
-from utills.enums import RequestStatus, RequestType
+from .config import reqbp
+from utills.enums import RequestType, RequestStatus
 from utills.utils import build_request
 
-reqbp = Blueprint('reqbp', __name__)
 
-@reqbp.route('/')
+@reqbp.route('/', methods=['GET'])
 def index():
     form = RequestForm()
-
     try:
+        user = build_request(
+            f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
+        )
+
+        print(user)
+
+        if user.status_code != 200:
+            return redirect("/auth")
+
         passmodes_request = build_request(
             "http://localhost:3002/api/v3/req/passmodes"
         )
@@ -31,6 +43,7 @@ def index():
                 "pages/request_creation.html",
                 form=form,
                 passmodes=passmodes_request.json()['passage_modes'],
+                user=user.json(),
                 types=types_request.json()['types'],
                 blocked=False
             )
@@ -41,6 +54,7 @@ def index():
             form=form,
             passmodes=[],
             types=[],
+            user=user.json(),
             blocked=True
         )
     except httpx.ConnectError as e:
@@ -50,8 +64,10 @@ def index():
             form=form,
             passmodes=[],
             types=[],
+            user={"role": {"name": None}},
             blocked=True
         )
+
 
 @reqbp.route('/', methods=['POST'])
 def create():
@@ -84,13 +100,14 @@ def create():
     print(request_type, "<<-- type")
 
 
-    if ((request_type == RequestType.REUSABLE.value.upper() and (to_date - from_date).days != 0)
-            or (request_type == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days > 0)
-            or (request_type == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days == 0
+    if ((request_type.upper() == RequestType.REUSABLE.value.upper() and (to_date - from_date).days != 0)
+            or (request_type.upper() == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days > 0)
+            or (request_type.upper() == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days == 0
                 and from_date.weekday() in [5, 6])
-            or (request_type == RequestType.DISPOSABLE.value.upper()
+            or (request_type.upper() == RequestType.DISPOSABLE.value.upper()
+                and (to_date - from_date).days == 0
                 and (to_date - from_date).days == 0)):
-                # and (to_date - from_date).days == 0 and _check_date(request, from_date))):  #TODO: доделать сервис валидации
+            # and _check_date(request, from_date))):  #TODO: доделать сервис валидации
         request_status = RequestStatus.APPROVE.value
     else:
         request_status = RequestStatus.CONSIDERATION.value
@@ -106,10 +123,10 @@ def create():
 
     if form.validate_on_submit():
         if form.create_btn.data:
-            print(form.data, " <<-- form data")
             body = {
                 "request_": {
                     "type_id": form.type.data,
+                    "date_created": datetime.now(),
                     "contract_name": form.contract.data,
                     "organization": form.organization.data,
                     "from_date": from_date,
@@ -137,17 +154,19 @@ def create():
             print(submit_request.json(), "<<-- created_request")
 
             if form.visitors_list.data:
-                visitors = [{
-                    "lastname": v["lastname"],
-                    "name": v["name"],
-                    "patronymic": v["patronymic"],
-                    "request_id": submit_request.json()["id"],
-                    "passed_status": False,
-                    "is_deleted": False,
-                    "date_deleted": None,
-                    "date_created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                visitors = [
+                    {
+                        "lastname": v["lastname"],
+                        "name": v["name"],
+                        "patronymic": v["patronymic"],
+                        "request_id": submit_request.json()["id"],
+                        "passed_status": False,
+                        "is_deleted": False,
+                        "date_deleted": None,
+                        "date_created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
 
-                } for v in form.visitors_list.data]
+                    } for v in form.visitors_list.data
+                ]
 
                 add_visitor_request = build_request(
                     "http://localhost:3002/api/v3/request/create/visitors",
@@ -173,17 +192,19 @@ def create():
 
                 car_type = list(filter(lambda x: x['type'] == "По заявке", car_types_request.json()["car_types"]))[0]["id"]
 
-                cars = [{
-                    "govern_num": c["govern_num"].replace(" ", "").upper(),
-                    "car_model": c["carmodel"],
-                    "passed_status": False,
-                    "type_id": car_type,
-                    "request_id": submit_request.json()["id"],
-                    "visitor_id": None,
-                    "is_deleted": False,
-                    "date_deleted": None,
-                    "date_created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-                } for c in form.cars_list.data]
+                cars = [
+                    {
+                        "govern_num": c["govern_num"].replace(" ", "").upper(),
+                        "car_model": c["carmodel"],
+                        "passed_status": False,
+                        "type_id": car_type,
+                        "request_id": submit_request.json()["id"],
+                        "visitor_id": None,
+                        "is_deleted": False,
+                        "date_deleted": None,
+                        "date_created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                    } for c in form.cars_list.data
+                ]
 
                 add_car_request = build_request(
                     "http://localhost:3002/api/v3/request/create/cars",

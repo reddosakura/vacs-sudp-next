@@ -1,24 +1,9 @@
 {% extends 'base.html' %}
 
-{% block additional_scripts_head %}
-    <script>
-
-    </script>
-{% endblock %}
-
 {% block main %}
     <div class="flex-fill d-flex gap-2 pt-2 pb-2">
         {% include 'inc/_sidebar.html' %}
         <div class="flex-fill d-flex flex-column gap-2" style="border-radius: .5em;font-size: calc((1vw + 1vh) * 0.7);">
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <div class=flashes>
-                {% for message in messages %}
-                    <div class="alert alert-danger alert-dismissible" role="alert"><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="alert"></button><span>{{ message }}</span></div>
-                {% endfor %}
-                </div>
-              {% endif %}
-            {% endwith %}
                 <div class="d-flex flex-column p-2 align-items-center justify-content-center border border-2" style="height: 5%;border-radius: .5em;">
                     <div class="form-switch chip d-flex justify-content-center">
                         <div class="centrize">
@@ -33,58 +18,63 @@
                     </div>
                 </div>
 
-            <div class="border border-2 p-2 overflow-auto" style="height: 95%;max-height: 100vh;border-radius: .5em;">
+            <div class="border border-2 p-2 overflow-auto d-flex flex-column" style="height: 95%;max-height: 100vh;border-radius: .5em;">
+            {% if mode == 'consider' %}
+                <div><span style="font-weight: bold;font-size: calc((1vw + 1vh) * 0.9);background: #ffffff;color: #E3BCF1;">Рассмотрение</span></div>
+            {% elif mode == 'approval' %}
                 <div><span style="font-weight: bold;font-size: calc((1vw + 1vh) * 0.9);background: #ffffff;color: #98B3F9;">Согласование</span></div>
+            {% endif %}
             {% if requests %}
                 {% for card in requests %}
                     {% with lastname=card['creatorobj']['lastname'],
                             name=card['creatorobj']['name'],
                             patronymic=card['creatorobj']['patronymic'],
                             number=card['id'],
-                            date_created=card['date_created']
+                            date_created=card['date_created'],
+                            selected=card['id'] == request_id
                             %}
-                        {{  }}
                     	{% include 'inc/_request_list_card.html' %}
                     {% endwith %}
                 {% endfor %}
+
             {% else %}
-                <p>СПИСОК ЗАЯВОК ПУСТ</p>
+                <p class="align-self-center m-auto">СПИСОК ЗАЯВОК ПУСТ</p>
             {% endif %}
             </div>
         </div>
 
-        {% if content %}
         <div class="flex-fill border border-2 me-2 d-flex flex-column gap-2" style="border-radius: .5em;width: 55%;">
+        {% if content %}
             <div class="d-flex align-items-center justify-content-end pe-2" style="height: 5%;">
                 <p class="m-0 p-0" style="font-size: 25px;font-weight: bold;color: rgb(212,212,212);">Заявка №{{ content['id'] }}</p>
             </div>
             <div class="flex-grow-1 d-flex gap-2" style="height: 20%;">
                 <div class="flex-grow-1 p-2 d-flex flex-column gap-2" style="width: 50%;">
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ЗАЯВИТЕЛЬ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">{{ content['creatorobj']['lastname'] }} {{ content['creatorobj']['name'][0] }}. {{ content['creatorobj']['patronymic'][0] + '.' if content['creatorobj']['patronymic'] else '' }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ЗАЯВИТЕЛЬ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['creatorobj']['lastname'] }} {{ content['creatorobj']['name'][0] }}. {{ content['creatorobj']['patronymic'][0] + '.' if content['creatorobj']['patronymic'] else '' }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ТИП ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">{{ content['type']['name'] }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ТИП ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['type']['name'] }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">{{ content['contract_name'] if content['contract_name'] else 'БЕЗ ДОГОВОРА' }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['contract_name'] if content['contract_name'] else 'БЕЗ ДОГОВОРА' }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">{{ content['organization'] if content['organization'] else 'БЕЗ ОРГАНИЗАЦИИ' }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['organization'] if content['organization'] else 'БЕЗ ОРГАНИЗАЦИИ' }}</span>
                     </div>
                 </div>
                 <div class="flex-grow-1 p-2 d-flex flex-column gap-2" style="width: 50%;">
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">C {{ content['from_date']|datefilter('%d.%m.%Y') }} ПО {{ content['to_date']|datefilter('%d.%m.%Y') }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАВКИ</p><span class="border rounded border-0 shadow m-0 p-0  text-uppercase" style="text-align: center;">C {{ content['from_date']|datefilter('%d.%m.%Y') }} ПО {{ content['to_date']|datefilter('%d.%m.%Y') }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">С {{ content['from_time']|timefilter('%H:%M') }} ДО {{ content['to_time']|timefilter('%H:%M') }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">С {{ content['from_time']|timefilter('%H:%M') }} ДО {{ content['to_time']|timefilter('%H:%M') }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">{{ content['passmode']['name'] }}</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['passmode']['name'] }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДАТА И ВРЕМЯ СОЗДАНИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0" style="text-align: center;">Text</span>
+                        <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДАТА И ВРЕМЯ СОЗДАНИЯ ЗАЯВКИ</p><span class="border rounded border-0 shadow m-0 p-0 text-uppercase" style="text-align: center;">{{ content['date_created']|datefilter('%H:%M %d.%m.%Y') }}</span>
                     </div>
                 </div>
             </div>
@@ -140,24 +130,39 @@
                             {{ form.request_id }}
                             <div class="border-0 shadow flex-fill d-flex flex-column p-2 rounded-3" style="height: 70%;"><span class="fw-semibold" style="text-align: left;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">НАПИСАТЬ КОММЕНТАРИЙ</span>
                                 <div class="flex-fill d-flex overflow-auto" style="max-height: 90vh;">
-                                    {{ form.comment(class="form-control flex-fill p-0 m-0", style="resize: none;") }}
+                                    {{ form.comment(class="form-control flex-fill p-2 m-0", style="resize: none;") }}
                                 </div>
                             </div>
                             <div class="flex-fill d-flex align-items-center flex-wrap gap-3">
-                                {% if not is_admin %}
+                                {% if not is_admin and mode == 'consider' %}
                                     {{ form.approve(class="btn flex-fill border-0 btn-primary", style="background: #fbf894;color: rgb(0,0,0);font-weight: bold;") }}
                                 {% endif %}
-                                {{ form.allow(class="btn flex-fill border-0 btn-primary", style="background: #94fbb1;color: rgb(0,0,0);font-weight: bold;") }}
+                                {% if not is_admin and mode == 'approval' %}
+                                    {{ form.approve(class="btn flex-fill border-0 btn-primary", style="background: #fbf894;color: rgb(0,0,0);font-weight: bold;") }}
+                                {% else %}
+                                    {{ form.allow(class="btn flex-fill border-0 btn-primary", style="background: #94fbb1;color: rgb(0,0,0);font-weight: bold;") }}
+                                {% endif %}
                                 {{ form.deny(class="btn flex-fill border-0 btn-primary", style="background: #f69595;color: rgb(0,0,0);font-weight: bold;") }}
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
         {% else %}
-                <P>НЕ УДАЛОСЬ ПОЛУЧИТЬ ДАННЫЕ</P>
+            <div class="align-self-center m-auto">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class=flashes>
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible align-self-center m-auto fs-3 text-center" role="alert"><span>{{ message }}</span></div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+                <p class="text-center">В ДАННОМ РАЗДЕЛЕ НЕТ ДАННЫХ</p>
+            </div>
         {% endif %}
+        </div>
     </div>
 
     <div class="modal fade modal-xl" role="dialog" tabindex="-1" id="file-modal">
@@ -181,4 +186,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block additional_scripts_end %}
+	<script src="{{ url_for('static', filename='/js/set_switch_trigger.js') }}"></script>
 {% endblock %}
