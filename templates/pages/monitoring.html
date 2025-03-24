@@ -1,110 +1,188 @@
-<html data-bs-theme="light" lang="en" data-bss-forced-theme="light" style="--scrollbar-width: 3.5px;">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <title>vacs-sudp-design</title>
-</head>
 
-<body class="d-flex flex-column" style="width: 100vw;height: 100vh;">
+{% block additional_scripts_head %}
+	<script src="{{ url_for('static', filename='/lib/markjs/mark.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    {% if is_admin %}
+        {% include 'inc/_sidebar.html' %}
+    {% endif %}
     <div class="d-flex flex-column flex-fill ps-2 pe-2 pb-2 gap-2" style="max-height: 100vh;">
+    
         <div class="border-2 d-flex justify-content-between align-items-center p-4 border" style="height: 5%;border-bottom-left-radius: .5em;border-bottom-right-radius: .5em;">
-            <div><img class="img-fluid" src="logo.svg" style="width: 2em;" /></div>
-            <div class="d-flex p-0 m-0">
-                <div class="d-flex flex-fill justify-content-center align-items-center"><input id="type-0" class="btn-check" type="radio" checked name="type" value="422a32fa-1cd2-4ef9-8b9b-4662f4d709e2" /><label class="flex-fill btn" for="type-0" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</label></div>
-                <div class="d-flex flex-fill justify-content-center align-items-center"><input id="type-1" class="btn-check" type="radio" name="type" value="80d7ae19-00d0-4705-b200-777e9b91f43b" /><label class="flex-fill btn" for="type-1" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</label></div>
+            <div>
+                {% if not is_admin %}
+                    <img class="img-fluid" src="{{ url_for('static', filename='img/logo.svg') }}" style="width: 2em;" />
+                {% endif %}
             </div>
-            <div class="d-flex align-items-center gap-2"><span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:КПП</span><img src="leave_btn.svg" style="width: 2em;" /></div>
+            <div class="d-flex p-0 m-0">
+                <div class="d-flex flex-fill justify-content-center align-items-center">
+                    <input id="type-0" class="btn-check " type="radio" checked name="type"/>
+                    <label class="flex-fill btn radio-outlined-color" for="type-0" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</label>
+                </div>
+                <div class="d-flex flex-fill justify-content-center align-items-center">
+                    <input id="type-1" class="btn-check " type="radio" name="type" />
+                    <label class="flex-fill btn radio-outlined-color" for="type-1" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</label>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2"><span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:{{ 'КПП' if not is_admin else 'АДМИНИСТРАТОР' }}</span>
+                <img src="{{ url_for('static', filename='img/leave_btn.svg') }}" style="width: 2em;" />
+            </div>
         </div>
-        <div class="d-flex flex-column gap-2" style="height: 95%;">
-            <div class="d-flex" style="height: 5%;"><input class="border-2 search-field focus-ring flex-fill border rounded-3 p-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" /></div>
-            <div class="d-flex gap-2" style="height: 95%;">
-                <div class="col d-flex">
-                    <div class="border-2 flex-fill border rounded-3 p-2 overflow-auto" style="height: 100%;max-height: 100%;">
-                        <div class="d-flex p-3 border border-0 rounded-3 shadow ps-0">
-                            <div class="flex-fill d-flex align-items-center justify-content-center" style="width: 5%;">
-                                <p class="m-0 flex-fill" style="transform: rotate(-90deg);font-weight: bold;font-size: calc((1vw + 1vh) * 0.6);">#2000</p>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class=flashes>
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible align-self-center m-auto fs-3 text-center" role="alert"><span>{{ message }}</span></div>
+            {% endfor %}
+            </div>
+          {% else %}
+            <div class="d-flex flex-column gap-2" style="height: 95%;">
+        <div class="d-flex" style="height: 5%;"><input id="search" class="border-2 search-field focus-ring flex-fill border rounded-3 p-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" /></div>
+        <div class="d-flex gap-2" style="height: 95%;">
+            <div class="col d-flex" style="max-width: 100%;">
+                <div id="monitoringMain" class="flex-fill d-flex flex-column gap-3 overflow-auto p-2 border border-2 rounded-3" style="max-height: 88vh;">
+                    {% for request in requests %}
+                        <div class="card-monitoring d-flex align-items-center p-2 rounded-3 shadow" data-bs-toggle="modal" data-bs-target="#passageModal-{{ request['id'] }}">
+                            <p class="visually-hidden cell-contract">{{ request['contract_name'] }}</p>
+                            <p class="visually-hidden cell-organisation">{{ request['organization'] }}</p>
+                            <div class="d-flex flex-fill align-items-center justify-content-center" style="width: 3%;">
+                                <p class="m-0" style="transform: rotate(-90deg);font-weight: bold;">#{{ request['id'] }}</p>
                             </div>
-                            <div class="d-flex flex-fill flex-column gap-2" style="width: 95%;">
-                                <div class="d-flex gap-2">
-                                    <div class="col d-flex flex-column gap-1">
-                                        <div>
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ФАМИЛИЯ ИМЯ ОТЧЕСТВО</p>
+                            <div class="d-flex flex-fill flex-column gap-2" style="width: 97%;">
+                                <div class="d-flex flex-fill gap-2">
+                                    <div class="col d-flex">
+                                        <div class="d-flex flex-fill flex-column gap-2">
+                                            <div>
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ФАМИЛИЯ ИМЯ ОТЧЕСТВО</p>
+                                            </div>
+                                            <ul class="list-group d-flex flex-fill">
+                                                {% if request['visitors'] %}
+                                                     {% for visitor in request['visitors'] %}
+                                                        <li class="list-group-item cell-lnp flex-fill"><span class="text-uppercase " style="font-weight: bold;">{{ visitor['lastname'] }} {{ visitor['name'] }} {{ visitor['patronymic'] if visitor['patronymic'] else '' }}</span></li>
+                                                    {% endfor %}
+                                                {% else %}
+                                                        <li class="list-group-item flex-fill"><span class="text-uppercase" style="font-weight: bold;">НЕТ ПРИКРЕПЛЕННЫХ ПОСЕТИТЕЛЕЙ</span></li>
+                                                {% endif %}
+                                            </ul>
                                         </div>
-                                        <ul class="list-group flex-fill d-flex flex-column">
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</strong></span></li>
-                                        </ul>
                                     </div>
-                                    <div class="col d-flex flex-column gap-1">
-                                        <div>
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">АВТОТРАНСПОРТ</p>
+                                    <div class="col d-flex">
+                                        <div class="d-flex flex-fill flex-column gap-2">
+                                            <div>
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">АВТОТРАНСПОРТ</p>
+                                            </div>
+                                            <ul class="list-group cell-cars d-flex flex-fill">
+                                                {% if request['cars'] %}
+                                                    {% for car in request['cars'] %}
+                                                        <li class="list-group-item flex-fill "><span class="text-uppercase " style="font-weight: bold;">{{ car['car_model'] }} {{ car['govern_num'] }}</span></li>
+                                                    {% endfor %}
+                                                {% else %}
+                                                        <li class="list-group-item flex-fill"><span class="text-uppercase" style="font-weight: bold;">НЕТ ПРИКРЕПЛЕННОГО АВТОТРАНСПОРТА</span></li>
+                                                {% endif %}
+                                            </ul>
                                         </div>
-                                        <ul class="list-group flex-fill d-flex flex-column">
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                            <li class="list-group-item flex-fill"><span style="font-size: calc((1vw + 1vh) * 0.65);"><strong>А777АА77 КИА РИО</strong></span></li>
-                                        </ul>
                                     </div>
                                 </div>
-                                <div class="d-flex gap-2">
+                                <div class="d-flex flex-fill gap-2">
                                     <div class="col d-flex">
-                                        <div class="flex-fill border border-1 rounded-3 d-flex align-items-center ps-1">
-                                            <p class="flex-fill m-0">Paragraph</p>
+                                        <div class="flex-fill d-flex">
+                                            <p class="m-0 flex-fill p-0 border border-1 rounded-3 p-2  {{ "border-main-color" if request['approval']['comment'] }}">{{ request['approval']['comment'] if request['approval']['comment'] else 'НЕТ КОММЕНТАРИЯ' }}</p>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="d-flex flex-fill align-items-center gap-4">
-                                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.45);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.45);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.45);font-weight: 600;">01.01.2024 09:00</span></div>
+                                            <div class="d-flex flex-column"><span class="decor" style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Заявитель</span><span class="decor" style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ request['creatorobj']['name'][0] }}. {{ request['creatorobj']['patronymic'][0] if request['creatorobj']['patronymic'] else '' }}. {{ request['creatorobj']['lastname'] }}</span></div>
+                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span class="decor" style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Тип заявки</span><span class="decor" style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ request['type']['name'].upper() }}</span></div>
+                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span class="decor" style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Дата создания</span><span class="decor" style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ request['date_created']|datefilter('%H:%M %d.%m.%Y') }}</span></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                <div class="col-4 d-flex">
-                    <div class="border-2 d-flex flex-column flex-fill p-2 gap-4 border rounded-3">
-                        <div class="d-flex flex-fill align-items-center" style="height: 5%;">
-                            <div class="d-flex flex-fill align-items-center"><img src="spec_transport_icon.svg" /><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.7);text-align: left;font-weight: 600;">ПРОПУСК СПЕЦТРАНСПОРТА</button></div>
+            </div>
+            <div class="col-4 d-flex flex-column border border-2 rounded-3">
+                <div class="d-flex flex-column flex-fill p-2 gap-2">
+                    <div class="d-flex flex-column flex-fill gap-2" style="height: 5%;">
+                        <div class="d-flex flex-fill"><img src="{{ url_for('static', filename='img/spec_transport_icon.svg') }}" /><button class="btn btn-primary text-start bg-transparent border-0" type="button" style="color: rgb(0,0,0);font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);" data-bs-target="#spectransportModal" data-bs-toggle="modal">ПРОПУСК СПЕЦТРАНСПОРТА</button></div>
+                        <div class="d-flex flex-fill"><input class="focus-ring flex-fill border rounded-3 p-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" /></div>
+                    </div>
+                    <div class="d-flex flex-fill flex-column pt-2 overflow-auto gap-3" style="height: 95%;max-height: 75vh;">
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
+                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
+                            <div>
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
                         </div>
-                        <div class="d-flex flex-fill" style="height: 2.5%;"><input class="border-2 search-field focus-ring flex-fill border rounded-3 p-2" type="text" placeholder="ПОИСК ПО СПИСКУ АВТОТРАНСПОРТА НА ТЕРРИТОРИИ" /></div>
-                        <div class="d-flex flex-column flex-fill overflow-auto gap-4" style="height: 80%;max-height: 80%;">
-                            <div class="d-flex p-3 ps-5 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                                <div class="d-flex flex-fill justify-content-between"><span class="d-flex align-items-center" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">А777АА77 КИА РИО</span>
-                                    <form><input class="btn border-2 focus-ring btn-primary" type="submit" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" value="ВЫЕЗД" /></form>
-                                </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
+                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
+                            <div>
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
                             </div>
-                            <div class="d-flex p-3 ps-5 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                                <div class="d-flex flex-fill justify-content-between"><span class="d-flex align-items-center" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">А777АА77 КИА РИО</span>
-                                    <form><input class="btn border-2 focus-ring btn-primary" type="submit" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" value="ВЫЕЗД" /></form>
-                                </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
+                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
+                            <div>
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
                             </div>
-                            <div class="d-flex p-3 ps-5 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                                <div class="d-flex flex-fill justify-content-between"><span class="d-flex align-items-center" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">А777АА77 КИА РИО</span>
-                                    <form><input class="btn border-2 focus-ring btn-primary" type="submit" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" value="ВЫЕЗД" /></form>
-                                </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
                             </div>
-                            <div class="d-flex p-3 ps-5 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                                <div class="d-flex flex-fill justify-content-between">
-                                    <div><span class="d-flex align-items-center" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">А777АА77 КИА РИО</span><span class="d-flex align-items-center" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);">СКОРАЯ ПОМОЩЬ</span></div>
-                                    <form class="d-flex align-items-center justify-content-center"><input class="btn border-2 focus-ring btn-primary" type="submit" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" value="ВЫЕЗД" /></form>
-                                </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
                             </div>
                         </div>
                     </div>
@@ -112,19 +190,200 @@
             </div>
         </div>
     </div>
-    <div id="passageModal" class="modal fade" role="dialog" tabindex="-1">
-        <div class="modal-dialog" role="document">
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    {% for request in requests %}
+        <div id="passageModal-{{ request['id'] }}" class="modal fade" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">ПРОПУСК ПОСЕТИТЕЛЕЙ И СПЕЦТРАНСПОРТА</h6><button class="btn-close" aria-label="Close" data-bs-dismiss="modal" type="button"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex gap-2">
+                            <div class="col d-flex">
+                                <div class="d-flex flex-column flex-fill p-2 border border-0 rounded-3 shadow">
+                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ПОСЕТИТЕЛИ</p>
+                                    <form class="d-flex flex-column flex-fill justify-content-between gap-2">
+                                        <div class="d-flex flex-column overflow-auto gap-1" style="max-height: 30vh;">
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-1" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-1" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-3" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-4" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-5" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-6" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-7" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-16" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-16" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-17" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-17" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-18" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-18" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-19" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-19" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-20" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-20" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
+                                        </div>
+                                        <div class="d-flex"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="d-flex flex-fill flex-column p-2 border border-0 rounded-3 shadow">
+                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">АВТОТРАНСПОРТ</p>
+                                    <form class="d-flex flex-column flex-fill justify-content-between gap-2">
+                                        <div class="d-flex flex-column overflow-auto gap-2" style="max-height: 30vh;">
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-2" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-2" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-8" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-9" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-10" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-11" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-12" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-13" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-14" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                            <ul class="list-group">
+                                                <li class="list-group-item p-2 d-flex">
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-15" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                </li>
+                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div id="spectransportModal" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Title</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    <h6 class="modal-title">ПРОПУСК ПОСЕТИТЕЛЕЙ И СПЕЦТРАНСПОРТА</h6><button class="btn-close" aria-label="Close" data-bs-dismiss="modal" type="button"></button>
                 </div>
                 <div class="modal-body">
-                    <p>The content of your modal.</p>
+                    <form>
+                        <div class="d-flex flex-column gap-4">
+                            <div class="flex-fill d-flex gap-2">
+                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">МАРКА И МОДЕЛЬ</span><input id="organization" class="form-control form-control form-control" type="text" name="organization" value /></div>
+                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">ГОСУДАРСТВЕННЫЙ НОМЕР</span><input id="organization-1" class="form-control form-control form-control" type="text" name="organization" value /></div>
+                            </div>
+                            <div class="flex-fill d-flex flex-column">
+                                <div>
+                                    <div class="form-check"><input id="formCheck-21" class="form-check-input" type="checkbox" /><label class="form-check-label" for="formCheck-21" style="font-size: calc((1vh + 1vw) * 0.5);">Указать тип спецтранспорта</label></div>
+                                </div>
+                                <div>
+                                    <select class="form-select">
+                                        <optgroup label="This is a group">
+                                            <option value="12" selected>This is item 1</option>
+                                            <option value="13">This is item 2</option>
+                                            <option value="14">This is item 3</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-fill"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
             </div>
         </div>
     </div>
-</body>
+{% endblock %}
 
-</html>
+{% block additional_scripts_end %}
+	    <script>
+
+      const $search = document.getElementById('search');
+
+      $search.addEventListener('input', (event) => {
+
+        const searchText = event.target.value;
+
+        const cards = document.querySelectorAll(".card-monitoring");
+
+        var instance = new Mark(document.querySelector("#monitoringMain"));
+
+        instance.unmark();
+        instance.mark(searchText, {
+          "each": function(element) {
+            setTimeout(function() {
+              $(element).addClass("animate");
+            }, 200);
+          },
+          "exclude": [
+              "p",
+              ".decor"
+          ],
+          "separateWordSearch": false
+        });
+
+        document.cookie = `search_value=${searchText}; SameSite=Lax;`;
+
+        for (let i = 0; i < cards.length; i++) {
+           // const cell_lnp = cards[i].querySelectorAll(".cell-lnp");
+            const cells_lnp = Array.from(cards[i].querySelectorAll(".cell-lnp")).map(elem => elem.textContent).join("\n");
+            {#const cell_cars = cards[i].querySelector(".cell-cars");#}
+            const cells_cars = Array.from(cards[i].querySelector(".cell-cars")).map(elem => elem.textContent).join("\n");
+            const cell_contract = cards[i].querySelector(".cell-contract");
+            const cell_organisation = cards[i].querySelector(".cell-organisation");
+
+
+
+            //for (let k = 0; k < cells_lnp.length; k++) {
+            //    for (let j = 0; j < cells_cars.length; j++) {
+            //        if (!cells_lnp[k].textContent.includes(searchText.toUpperCase())
+            //            && !cells_cars[j].textContent.toUpperCase().includes(searchText.toUpperCase())
+            //            && !cell_contract.textContent.toUpperCase().includes(searchText.toUpperCase())
+            //            && !cell_organisation.textContent.toUpperCase().includes(searchText.toUpperCase())
+            //          ){
+            //            cards[i].classList.add("visually-hidden")
+            //        } else {
+            //            cards[i].classList.remove("visually-hidden")
+            //        }
+            //    }
+            //}
+        }
+      });
+    </script>
+{% endblock %}

@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import Flask, redirect
 from modules.auth.auth_app import authbp
+from modules.monitoring.monitoring_app import monbp
 from modules.processing.processing_app import procbp
 from modules.requests.request_app import reqbp
 from modules.users.users_app import usersbp
@@ -12,6 +13,7 @@ app.register_blueprint(authbp, url_prefix='/auth')
 app.register_blueprint(usersbp, url_prefix='/users')
 app.register_blueprint(reqbp, url_prefix='/requests')
 app.register_blueprint(procbp, url_prefix='/processing')
+app.register_blueprint(monbp, url_prefix='/monitoring')
 
 
 @app.template_filter("datefilter")

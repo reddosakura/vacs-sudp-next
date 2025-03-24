@@ -99,15 +99,13 @@ def create():
     request_type = list(filter(lambda x: x['id'] == form.type.data, types_request.json()["types"]))[0]["name"]
     print(request_type, "<<-- type")
 
+    if ((request_type == RequestType.REUSABLE.value and (to_date - from_date).days != 0)
+            or (request_type == RequestType.DISPOSABLE.value and (to_date - from_date).days > 0)
+            or (request_type == RequestType.DISPOSABLE.value and (to_date - from_date).days == 0 and from_date.weekday() in [5, 6])):
+            # or (request_type == RequestType.DISPOSABLE.value
+            #     and (to_date - from_date).days == 0
+             # and _check_date(request, from_date))):  #TODO: доделать сервис валидации
 
-    if ((request_type.upper() == RequestType.REUSABLE.value.upper() and (to_date - from_date).days != 0)
-            or (request_type.upper() == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days > 0)
-            or (request_type.upper() == RequestType.DISPOSABLE.value.upper() and (to_date - from_date).days == 0
-                and from_date.weekday() in [5, 6])
-            or (request_type.upper() == RequestType.DISPOSABLE.value.upper()
-                and (to_date - from_date).days == 0
-                and (to_date - from_date).days == 0)):
-            # and _check_date(request, from_date))):  #TODO: доделать сервис валидации
         request_status = RequestStatus.APPROVE.value
     else:
         request_status = RequestStatus.CONSIDERATION.value

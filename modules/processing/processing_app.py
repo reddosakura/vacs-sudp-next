@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from forms import ProcessRequestForm
 from modules.requests.exceptions import FailWhileProcessing
-from utills.enums import RequestStatus
+from utills.enums import RequestStatus, Scopes
 from utills.utils import build_request
 
 procbp = Blueprint('procbp', __name__)
@@ -30,8 +30,8 @@ def consider():
             return redirect("/auth")
 
         is_admin = False
-        if (check_password_hash(user_role, "Суперпользователь") or
-                check_password_hash(user_role, "Администратор")):
+        if (check_password_hash(user_role, Scopes.SUPERUSER.value) or
+                check_password_hash(user_role, Scopes.ADMIN.value)):
             is_admin = True
 
         response = build_request(
@@ -50,9 +50,22 @@ def consider():
                                    user=user.json(),
                                    form=ProcessRequestForm()
                                    )
+
+        if not response.json()['requests']:
+            return render_template("pages/processing.html",
+                                   requests=[],
+                                   mode="consider",
+                                   request_id=None,
+                                   is_admin=is_admin,
+                                   blocked=True,
+                                   user=user.json(),
+                                   form=ProcessRequestForm()
+                                   )
         content = build_request(
             f"http://localhost:3002/api/v3/request/{request_id if request_id else response.json()['requests'][0]['id']}"
         )
+
+
 
         if content.status_code != 200:
             flash(f"Сервис заявок вернул некорректный код: {content.status_code}")

@@ -36,9 +36,8 @@ class OnTerritoryMode(str, Enum):
 
 
 class Scopes(Enum):
-    SUPERUSER = "superuser"
-    ADMIN = "admin"
-    LIMITED_ADMIN = "limited_admin"
-    REQUESTER = "requester"
-    MONITORING = "monitoring"
-    CURRENT = "current_user"
+    SUPERUSER = "Суперпользователь"
+    ADMIN = "Администратор"
+    LIMITED_ADMIN = "Ограниченное администрирование"
+    REQUESTER = "Заявитель"
+    MONITORING = "Охрана"
