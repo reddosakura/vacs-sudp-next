@@ -3,10 +3,11 @@ from datetime import date
 import wtforms
 # from starlette_wtf import FlaskForm
 from flask_wtf import FlaskForm
+from wtforms import widgets
 from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import StringField, PasswordField, TextAreaField, SubmitField, FileField, HiddenField
 from wtforms.fields import DateField, MultipleFileField, FormField, FieldList, BooleanField
-from wtforms.fields.choices import SelectField, RadioField
+from wtforms.fields.choices import SelectField, RadioField, SelectMultipleField
 from wtforms.validators import DataRequired, Optional, Regexp
 from flask_wtf.file import FileAllowed
 
@@ -49,6 +50,10 @@ ROLES = [
     ("3", "АДМИНИСТРАТОР"),
     ("4", "СУПЕРПОЛЬЗОВАТЕЛЬ"),
 ]
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 
 class AuthForm(FlaskForm):
@@ -102,10 +107,12 @@ class UploadListForm(FlaskForm):
     upload = SubmitField('ВЫГРУЗИТЬ ДАННЫЕ')
 
 
-class PassageForm(FlaskForm):
-    request_type = None
-    visitors_radio_group = RadioField("visitors", coerce=int, validate_choice=False)
-    cars_radio_group = RadioField("cars", coerce=int, validate_choice=False)
+class VisitorsPassageForm(FlaskForm):
+    visitors_check_group = MultiCheckboxField("visitors", coerce=str, validate_choice=False)
+    pass_submit = SubmitField("ПРОПУСТИТЬ")
+
+class CarsPassageForm(FlaskForm):
+    cars_check_group = MultiCheckboxField("cars", coerce=str, validate_choice=False)
     pass_submit = SubmitField("ПРОПУСТИТЬ")
 
 
@@ -122,7 +129,7 @@ class ExitForm(FlaskForm):
 class SpecTransportForm(FlaskForm):
     model_field = StringField('model', validators=[DataRequired()])
     govern_num_field = StringField('model', validators=[DataRequired()])
-    type_field = SelectField('type', choices=SPECTYPES)
+    type_field = SelectField('type', coerce=str)
     pass_spec_submit = SubmitField("ПРОПУСТИТЬ")
 
 

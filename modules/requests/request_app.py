@@ -186,8 +186,6 @@ def create():
                     flash(f"Не удалось прикрепить автотранспорт к заявки. Не удалось получить список типов автотранспорта.. Сервис API вернул код: {car_types_request.status_code}", "alert-danger")
                     return redirect("/requests/")
 
-                print(car_types_request.json(), "<<-- car_types_request")
-
                 car_type = list(filter(lambda x: x['type'] == "По заявке", car_types_request.json()["car_types"]))[0]["id"]
 
                 cars = [
@@ -199,6 +197,7 @@ def create():
                         "request_id": submit_request.json()["id"],
                         "visitor_id": None,
                         "is_deleted": False,
+                        "on_territory": False,
                         "date_deleted": None,
                         "date_created": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
                     } for c in form.cars_list.data

@@ -298,17 +298,20 @@ def _process_request(form: ProcessRequestForm, mode: str, user_role: str):
                 "request_status_id": status.json()["id"],
                 "passmode_id": get_request.json()["passmode_id"],
                 "creator": get_request.json()["creator"],
-                "is_deleted": get_request.json()["is_deleted"]
+                "is_deleted": get_request.json()["is_deleted"],
+                "id": get_request.json()["id"]
             },
             "visitors_": get_request.json()["visitors"],
             "cars_": get_request.json()["cars"]
         }
 
         update_request = build_request(
-            f"http://localhost:3002/api/v3/request/update/{form.request_id.data}",
+            f"http://localhost:3002/api/v3/request/update",
             method="PUT",
             data=update_request_payload
         )
+
+        print(update_request.status_code)
 
         if update_request.status_code != 204:
             raise FailWhileProcessing(f"НЕ УДАЛОСЬ ОБРАБОТАТЬ ЗАЯВКУ. ПУЛ СОГЛАСОВАНИЯ ВЕРНУЛ КОД: {update_request.status_code}")

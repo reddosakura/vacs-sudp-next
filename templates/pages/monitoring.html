@@ -3,6 +3,31 @@
 
 {% block additional_scripts_head %}
 	<script src="{{ url_for('static', filename='/lib/markjs/mark.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/collapseArea.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URL(location).searchParams;
+            const sudp_request = urlParams.get('show');
+            console.log(sudp_request);
+            if (sudp_request) {
+                $('#passageModal').modal('show');
+                var instance = new Mark(document.querySelector("#passageModal"));
+
+                instance.unmark();
+                instance.mark(getCookieValue("search_value"), {
+                    "exclude": [
+                        ".creator",
+                        ".req-comment",
+                        ".header"
+                    ],
+                    "element": "span",
+                    "className": "elem-highlight",
+                    "separateWordSearch": false
+                });
+                document.cookie = "search_value=; SameSite=Lax;";
+            }
+        })
+    </script>
 {% endblock %}
 
 {% block main %}
@@ -46,7 +71,8 @@
             <div class="col d-flex" style="max-width: 100%;">
                 <div id="monitoringMain" class="flex-fill d-flex flex-column gap-3 overflow-auto p-2 border border-2 rounded-3" style="max-height: 88vh;">
                     {% for request in requests %}
-                        <div class="card-monitoring d-flex align-items-center p-2 rounded-3 shadow" data-bs-toggle="modal" data-bs-target="#passageModal-{{ request['id'] }}">
+{#                        <div class="card-monitoring d-flex align-items-center p-2 rounded-3 shadow" data-bs-toggle="modal" data-bs-target="#passageModal">#}
+                        <div class="card-monitoring d-flex align-items-center p-2 rounded-3 shadow" onclick="window.location='/monitoring/{{ request['id'] }}?show=true'">
                             <p class="visually-hidden cell-contract">{{ request['contract_name'] }}</p>
                             <p class="visually-hidden cell-organisation">{{ request['organization'] }}</p>
                             <div class="d-flex flex-fill align-items-center justify-content-center" style="width: 3%;">
@@ -113,78 +139,33 @@
                         <div class="d-flex flex-fill"><input class="focus-ring flex-fill border rounded-3 p-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" /></div>
                     </div>
                     <div class="d-flex flex-fill flex-column pt-2 overflow-auto gap-3" style="height: 95%;max-height: 75vh;">
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
-                            <div>
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
-                            <div>
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
-                            <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span></div>
-                            <div>
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
-                            <div class="d-flex ps-5 flex-column"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">А777АА77 киа рио</span><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">Скорая помощь</span></div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <form><input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" /></form>
-                            </div>
-                        </div>
+                        
+                        {% if cars_on_territory %}
+                        	{% for car in cars_on_territory %}
+                        		{% if car['transport_type']['type'] == 'По заявке' %}
+                                    <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #DABCF1, 0px 0.3em 0px #DABCF1;">
+                                        <div class="d-flex align-items-center justify-content-center ps-5"><span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">{{ car['govern_num'].upper() }} {{ car['car_model'].upper() }}</span></div>
+                                        <div>
+                                            <form method="get" action="/monitoring/car/out/{{ car["id"] }}">
+                                                <input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" />
+                                            </form>
+                                        </div>
+                                    </div>
+                        		{% else %}
+                                    <div class="d-flex justify-content-between p-3 rounded-3" style="box-shadow: inset 1em 0px #F1DFBC, 0px 0.3em 0px #F1DFBC;">
+                                        <div class="d-flex ps-5 flex-column">
+                                            <span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">{{ car['govern_num'].upper() }} {{ car['car_model'].upper() }}</span>
+                                            <span class="text-uppercase" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">{{ car['transport_type']["type"].upper() }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <form method="get" action="/monitoring/car/out/{{ car["id"] }}">
+                                                <input class="btn btn-primary bg-transparent border-2 focus-ring" type="submit" value="ВЫЕЗД" style="color: rgb(0,0,0);font-weight: bold;border-color: #d4d4d4;" />
+                                            </form>
+                                        </div>
+                                    </div>
+                        		{% endif %} 
+                        	{% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -194,106 +175,63 @@
         {% endwith %}
     </div>
 
-    {% for request in requests %}
-        <div id="passageModal-{{ request['id'] }}" class="modal fade" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title">ПРОПУСК ПОСЕТИТЕЛЕЙ И СПЕЦТРАНСПОРТА</h6><button class="btn-close" aria-label="Close" data-bs-dismiss="modal" type="button"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="d-flex gap-2">
-                            <div class="col d-flex">
-                                <div class="d-flex flex-column flex-fill p-2 border border-0 rounded-3 shadow">
-                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ПОСЕТИТЕЛИ</p>
-                                    <form class="d-flex flex-column flex-fill justify-content-between gap-2">
-                                        <div class="d-flex flex-column overflow-auto gap-1" style="max-height: 30vh;">
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-1" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-1" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-3" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-4" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-5" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-6" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-7" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-7" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-16" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-16" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-17" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-17" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-18" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-18" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-19" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-19" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0"><input id="formCheck-20" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase m-0" for="formCheck-20" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">Лосино-островский иван иванович</label></div>
-                                        </div>
-                                        <div class="d-flex"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
-                                    </form>
-                                </div>
+    <div id="passageModal" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">ПРОПУСК ПОСЕТИТЕЛЕЙ И СПЕЦТРАНСПОРТА</h6><button class="btn-close" aria-label="Close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex gap-2">
+                        <div class="col d-flex">
+                            <div class="d-flex flex-column flex-fill p-2 border border-0 rounded-3 shadow">
+                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ПОСЕТИТЕЛИ</p>
+                                <form class="d-flex flex-column flex-fill justify-content-between gap-2" method="post" action="/monitoring/visitors/passage?request={{ request_id }}">
+                                    {{ visitors_form.csrf_token }}
+                                    <div class="d-flex flex-column overflow-auto gap-1" style="max-height: 30vh;">
+                                        {% for field in visitors_form.visitors_check_group %}
+
+                                            <div class="form-check p-3 d-flex gap-3 align-items-center border border-1 rounded-3 m-0">
+                                                {{ field(class="form-check-input m-0 p-0") }}
+                                                {{ field.label(class="form-check-label text-uppercase m-0", style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);") }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="d-flex">
+                                        {{ visitors_form.pass_submit(class="btn btn-primary flex-fill main-color") }}
+                                    </div>
+                                </form>
                             </div>
-                            <div class="col d-flex">
-                                <div class="d-flex flex-fill flex-column p-2 border border-0 rounded-3 shadow">
-                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">АВТОТРАНСПОРТ</p>
-                                    <form class="d-flex flex-column flex-fill justify-content-between gap-2">
-                                        <div class="d-flex flex-column overflow-auto gap-2" style="max-height: 30vh;">
+                        </div>
+                        <div class="col d-flex">
+                            <div class="d-flex flex-fill flex-column p-2 border border-0 rounded-3 shadow">
+                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">АВТОТРАНСПОРТ</p>
+                                <form class="d-flex flex-column flex-fill justify-content-between gap-2" method="post" action="/monitoring/cars/passage?request={{ request_id }}">
+                                    {{ cars_form.csrf_token }}
+                                    <div class="d-flex flex-column overflow-auto gap-2" style="max-height: 30vh;">
+                                        {% for field in cars_form.cars_check_group %}
                                             <ul class="list-group">
                                                 <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-2" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-2" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
+                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0">
+                                                        {{ field(class="form-check-input m-0 p-0") }}
+                                                        {{ field.label(class="form-check-label text-uppercase m-0", style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);") }}
+                                                    </div>
                                                 </li>
                                                 <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
                                             </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-8" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-9" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-10" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-11" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-12" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-13" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-14" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                            <ul class="list-group">
-                                                <li class="list-group-item p-2 d-flex">
-                                                    <div class="form-check d-flex gap-3 align-items-center p-0 m-0"><input id="formCheck-15" class="form-check-input m-0 p-0" type="checkbox" /><label class="form-check-label text-uppercase" for="formCheck-15" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">А777аа77 Киа рио</label></div>
-                                                </li>
-                                                <li class="list-group-item"><span>НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
-                                    </form>
-                                </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="d-flex">
+                                        {{ cars_form.pass_submit(class="btn btn-primary flex-fill main-color") }}
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
 
     <div id="spectransportModal" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -302,27 +240,31 @@
                     <h6 class="modal-title">ПРОПУСК ПОСЕТИТЕЛЕЙ И СПЕЦТРАНСПОРТА</h6><button class="btn-close" aria-label="Close" data-bs-dismiss="modal" type="button"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form method="post" action="/monitoring/spec/passage">
+                        {{ spec_form.csrf_token }}
                         <div class="d-flex flex-column gap-4">
                             <div class="flex-fill d-flex gap-2">
-                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">МАРКА И МОДЕЛЬ</span><input id="organization" class="form-control form-control form-control" type="text" name="organization" value /></div>
-                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">ГОСУДАРСТВЕННЫЙ НОМЕР</span><input id="organization-1" class="form-control form-control form-control" type="text" name="organization" value /></div>
+                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">ГОСУДАРСТВЕННЫЙ НОМЕР</span>
+                                    {{ spec_form.govern_num_field(class="form-control form-control form-control") }}
+                                </div>
+                                <div class="col"><span style="font-size: calc((1vh + 1vw) * 0.5);">МАРКА И МОДЕЛЬ</span>
+                                    {{ spec_form.model_field(class="form-control form-control form-control") }}
+                                </div>
                             </div>
                             <div class="flex-fill d-flex flex-column">
                                 <div>
-                                    <div class="form-check"><input id="formCheck-21" class="form-check-input" type="checkbox" /><label class="form-check-label" for="formCheck-21" style="font-size: calc((1vh + 1vw) * 0.5);">Указать тип спецтранспорта</label></div>
+                                    <div class="form-check">
+                                        <input id="formCheck-21" class="form-check-input collapse-checkbox" type="checkbox" onclick="collapseArea()" />
+                                        <label class="form-check-label" for="formCheck-21" style="font-size: calc((1vh + 1vw) * 0.5);">Указать тип спецтранспорта</label>
+                                    </div>
                                 </div>
                                 <div>
-                                    <select class="form-select">
-                                        <optgroup label="This is a group">
-                                            <option value="12" selected>This is item 1</option>
-                                            <option value="13">This is item 2</option>
-                                            <option value="14">This is item 3</option>
-                                        </optgroup>
-                                    </select>
+                                    {{ spec_form.type_field(class="form-select collapse-area visually-hidden") }}
                                 </div>
                             </div>
-                            <div class="d-flex flex-fill"><input class="btn btn-primary flex-fill" type="submit" value="ПРОПУСТИТЬ" /></div>
+                            <div class="d-flex flex-fill ">
+                                {{ spec_form.pass_spec_submit(class="btn btn-primary flex-fill main-color") }}
+                            </div>
                         </div>
                     </form>
                 </div>
