@@ -1,12 +1,10 @@
-import uuid
+import datetime
 from datetime import date
 import wtforms
-# from starlette_wtf import FlaskForm
 from flask_wtf import FlaskForm
 from wtforms import widgets
-from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import StringField, PasswordField, TextAreaField, SubmitField, FileField, HiddenField
-from wtforms.fields import DateField, MultipleFileField, FormField, FieldList, BooleanField
+from wtforms.fields import DateField, MultipleFileField, FormField, FieldList, BooleanField, TimeField
 from wtforms.fields.choices import SelectField, RadioField, SelectMultipleField
 from wtforms.validators import DataRequired, Optional, Regexp
 from flask_wtf.file import FileAllowed
@@ -133,11 +131,13 @@ class SpecTransportForm(FlaskForm):
     pass_spec_submit = SubmitField("ПРОПУСТИТЬ")
 
 
-class FilterForm(FlaskForm):
+class FilterSearchForm(FlaskForm):
+    search_field = StringField(render_kw={"placeholder": "ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ"})
     filter_fdate = DateField("filter_fdate", default=date.today)
     filter_tdate = DateField("filter_tdate", default=date.today)
-    apply_button = SubmitField("ПРИМЕНИТЬ ФИЛЬТР")
-    reset_button = SubmitField("СБРОСИТЬ ФИЛЬТР")
+    filter_ftime = TimeField("filter_ftime", default=datetime.datetime.strptime("00:00:00", "%H:%M:%S").time())
+    filter_ttime = TimeField("filter_ttime", default=datetime.datetime.strptime("23:59:00", "%H:%M:%S").time())
+    apply_button = SubmitField("ПОИСК ПО УКАЗАННЫМ КРИТЕРИЯМ")
 
 
 class RecallForm(FlaskForm):

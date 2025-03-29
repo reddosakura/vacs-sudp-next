@@ -1,6 +1,3 @@
-# from datetime import datetime
-# from pprint import pprint
-
 import httpx
 from flask import Blueprint, render_template, request, flash, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -11,9 +8,6 @@ from utills.enums import RequestStatus, Scopes
 from utills.utils import build_request
 
 procbp = Blueprint('procbp', __name__)
-
-
-
 
 
 @procbp.route('/consider', methods=['GET'])
@@ -310,8 +304,6 @@ def _process_request(form: ProcessRequestForm, mode: str, user_role: str):
             method="PUT",
             data=update_request_payload
         )
-
-        print(update_request.status_code)
 
         if update_request.status_code != 204:
             raise FailWhileProcessing(f"НЕ УДАЛОСЬ ОБРАБОТАТЬ ЗАЯВКУ. ПУЛ СОГЛАСОВАНИЯ ВЕРНУЛ КОД: {update_request.status_code}")

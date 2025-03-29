@@ -20,9 +20,6 @@ def index():
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
         )
-
-        print(user)
-
         if user.status_code != 200:
             return redirect("/auth")
 
@@ -154,9 +151,9 @@ def create():
             if form.visitors_list.data:
                 visitors = [
                     {
-                        "lastname": v["lastname"],
-                        "name": v["name"],
-                        "patronymic": v["patronymic"],
+                        "lastname": v["lastname"].upper(),
+                        "name": v["name"].upper(),
+                        "patronymic": v["patronymic"].upper() if v['patronymic'] else None,
                         "request_id": submit_request.json()["id"],
                         "passed_status": False,
                         "is_deleted": False,

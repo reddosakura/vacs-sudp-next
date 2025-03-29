@@ -250,21 +250,29 @@ def index():
     cars_form = CarsPassageForm()
     spec_form = SpecTransportForm()
 
-    car_types = build_request(
-        "http://localhost:3002/api/v3/request/car/types",
-    )
+    try:
+        car_types = build_request(
+            "http://localhost:3002/api/v3/request/car/types",
+        )
 
-    if car_types.status_code != 200:
+        if car_types.status_code != 200:
+            flash(
+            f"НЕ УДАЛОСЬ ПОЛУЧИТЬ ИНФОРМАЦИЮ О ЗАЯВКЕ, СЕРВИС ЗАЯВОК ВЕРНУЛ КОД: {car_types.status_code}")
+            return render_template("pages/monitoring.html",
+                                   cars_form=CarsPassageForm(),
+                                   spec_form=SpecTransportForm(),
+                                   visitors_form=VisitorsPassageForm())
+
+        spec_form.type_field.choices = [(car_type['id'], f'{car_type['type']}') for car_type in car_types.json()["car_types"] if car_type["type"] != "По заявке"]
+
+        return _get_content(visitors_form, cars_form, spec_form, None)
+    except httpx.ConnectError as e:
         flash(
-        f"НЕ УДАЛОСЬ ПОЛУЧИТЬ ИНФОРМАЦИЮ О ЗАЯВКЕ, СЕРВИС ЗАЯВОК ВЕРНУЛ КОД: {car_types.status_code}")
+            f"МОНИТОРИНГ НЕДОСТУПЕН, НЕ УДАЛОСЬ СВЯЗАТЬСЯ С СЕРВИСОМ ЗАЯВОК")
         return render_template("pages/monitoring.html",
                                cars_form=CarsPassageForm(),
                                spec_form=SpecTransportForm(),
                                visitors_form=VisitorsPassageForm())
-
-    spec_form.type_field.choices = [(car_type['id'], f'{car_type['type']}') for car_type in car_types.json()["car_types"] if car_type["type"] != "По заявке"]
-
-    return _get_content(visitors_form, cars_form, spec_form, None)
 
 
 @monbp.route('/<request_id>')

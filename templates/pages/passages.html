@@ -1,168 +1,207 @@
-<!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>vacs-sudp-design (2)</title>
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/Golos%20Text.css">
-    <link rel="stylesheet" href="../static/css/siderbar.css">
-</head>
-
-<body style="width: 100vw;height: 100vh;">
+{% block main %}
     <div class="d-flex flex-fill pb-2 pt-2 pe-2 gap-2">
-        <div id="sidebar" class="border border-2 sidebar d-flex flex-column justify-content-between p-2" style="border-top-right-radius: .5em;border-bottom-right-radius: .5em;">
-            <div><img src="../static/img/logo.svg" style="max-height: 3.5vh;"></div>
-            <ul class="d-flex flex-column gap-3">
-                <li class="justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-bounding-box icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"></path>
-                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
-                    </svg><span class="text visually-hidden">УЧЕТНЫЕ <br>ЗАПИСИ</span></li>
-                <li class="justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark-text icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" class="inner-svg"></path>
-                    </svg><span class="text visually-hidden">ТЕКУЩИЕ <br>ЗАЯВКИ</span></li>
-                <li class="justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-vector-pen icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.828L10.646.646zm-1.8 2.908-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z" class="inner-svg"></path>
-                        <path fill-rule="evenodd" d="M2.832 13.228 8 9a1 1 0 1 0-1-1l-4.228 5.168-.026.086.086-.026z"></path>
-                    </svg><span class="text visually-hidden">ОБРАБОТКА <br>ЗАЯВОК</span></li>
-                <li class="justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-door-open icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"></path>
-                        <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z" class="inner-svg"></path>
-                    </svg><span class="text visually-hidden">ОТЧЕТ ПО <br>ПРОХОДАМ</span></li>
-                <li class="d-flex justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-database icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313ZM13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"></path>
-                    </svg><span class="text visually-hidden">ОТЧЕТ ПО <br>ЗАЯВКАМ</span></li>
-                <li class="d-flex justify-content-center"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-shield icon p-2" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56"></path>
-                    </svg><span class="text visually-hidden">МОНИТОРИНГ И <br>ОХРАНА</span></li>
-            </ul>
-            <div class="d-flex align-items-center justify-content-center"><img class="p-1" src="../static/img/user-icon-role.svg" style="max-height: 4.5vh;background: #e3bcf1;border-radius: .3em;"></div>
-        </div>
+
+    {% include 'inc/_sidebar.html' %}
+    
         <div class="d-flex flex-fill flex-column gap-4">
-            <div class="d-flex gap-2" style="height: 5%;">
-                <div class="col d-flex"><input type="text" class="flex-fill border border-2 rounded-3 ps-2" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" style="font-weight: 500;"></div>
-                <div class="col-1 d-flex">
-                    <div class="d-flex flex-fill"><button class="btn btn-primary flex-fill rounded-3" type="button">Поиск</button></div>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class=flashes>
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible align-self-center m-auto fs-3 text-center" role="alert"><span>{{ message }}</span></div>
+                {% endfor %}
                 </div>
-            </div>
-            <div class="d-flex gap-4" style="height: 5%;">
-                <div class="d-flex gap-2">
-                    <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">С даты</span><input class="border border-2 rounded-2 flex-fill" type="date" style="text-align: center;"></div>
-                    <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">По даты</span><input class="border border-2 rounded-2 flex-fill" type="date" style="text-align: center;"></div>
-                </div>
-                <div class="d-flex gap-2">
-                    <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">С часа</span><input class="border border-2 rounded-2 flex-fill" type="time" style="text-align: center;"></div>
-                    <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">До часа</span><input class="border border-2 rounded-2 flex-fill" type="time" style="text-align: center;"></div>
-                </div>
-            </div>
-            <div class="d-flex gap-2" style="height: 90%;">
+              {% else %}
+                  <form class="d-flex flex-column gap-2" style="height: 10%" method="get" action="/passages/search">
+                        <div class="d-flex">
+                            <div class="d-flex gap-2 m-0 flex-fill">
+                                <div class="d-flex flex-fill">
+{#                                    <input class="form-control flex-fill border border-2 rounded-3 ps-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" style="font-weight: 500;">#}
+                                    {{ form.search_field(class="form-control flex-fill border border-2 rounded-3 ps-2", placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ", style="font-weight: 500;") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="flex-fill d-flex p-0 m-0 justify-content-between">
+                                <div class="d-flex gap-4">
+                                    <div class="d-flex gap-2">
+                                        <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">С даты</span>
+                                            {{ form.filter_fdate(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
+{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="date" style="text-align: center;">#}
+                                        </div>
+                                        <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">По даты</span>
+                                            {{ form.filter_tdate(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
+{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="date" style="text-align: center;">#}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="d-flex flex-column">
+                                            <span style="font-weight: 600;color: #d4d4d4;">С часа</span>
+                                            {{ form.filter_ftime(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
+{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="time" style="text-align: center;">#}
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span style="font-weight: 600;color: #d4d4d4;">До часа</span>
+                                            {{ form.filter_ttime(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
+{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="time" style="text-align: center;">#}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+{#                                    {{ form.apply_button(class="btn btn-primary flex-fill m-0 main-color") }}#}
+                                    <input class="btn btn-primary flex-fill m-0 main-color" type="submit" value="ПОИСК ПО УКАЗАННЫМ КРИТЕРИЯМ">
+                                    <a class="btn btn-primary flex-fill m-0 bg-danger text-center align-content-center border border-0" href="/passages/">СБРОС</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+              {% endif %}
+            {% endwith %}
+
+            <div class="d-flex gap-2" style="height: 85%;">
                 <div class="col shadow-lg rounded-3">
-                    <div class="d-flex flex-column"><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ПОСЕТИТЕЛИ</span>
+                    <div class="d-flex flex-column"><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.7);font-weight: 600;">ПОСЕТИТЕЛИ</span>
                         <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 95%;max-height: 80vh;">
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
-                            <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                                <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                                <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                            </div>
+
+                            {% if v_passages %}
+                            	{% for passage in v_passages %}
+                                    <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" style="background: #e8fff8;">
+                                        <div class="d-flex flex-column">
+                                            <span class="text-truncate" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);max-width: 15vw;" title="{{ passage['visitor']['lastname'].upper() }}">{{ passage['visitor']['lastname'].upper() }}</span>
+                                            <span class="text-truncate" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);max-width: 15vw;" title="{{ passage['visitor']['name'].upper() }}">{{ passage['visitor']['name'].upper() }}</span>
+                                            <span class="text-truncate" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);max-width: 15vw;" title="{{ passage['visitor']['patronymic'].upper() if passage['visitor']['patronymic'] }}">{{ passage['visitor']['patronymic'].upper() if passage['visitor']['patronymic'] }}</span>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span>
+                                            <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%d.%m.%Y') }}</span>
+                                            <span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span>
+                                            <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%H:%M') }}</span>
+                                        </div>
+                                    </div>
+                            	{% endfor %}
+
+                            {% endif %}
+
+
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="shadow-lg d-flex flex-fill rounded-3"></div><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ПОСЕТИТЕЛИ</span>
-                    <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 95%;max-height: 80vh;">
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
+                <div class="col shadow-lg rounded-3">
+                    <div class="d-flex flex-column"><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.7);font-weight: 600;">АВТОМОБИЛИ</span>
+                        <div class="d-flex flex-column align-items-end p-1" style="height: 10vh;">
+                            <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">Статус</span>
+                                <select class="form-select m-0 car-filter" onchange="filterCars()">
+                                    <optgroup label="Выберите статус">
+                                        <option value="3" selected>Все статусы</option>
+                                        <option value="1">Въезд</option>
+                                        <option value="2">Выезд</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="p-2 overflow-auto d-flex flex-column gap-2 " style="height: 85%;max-height: 70vh">
+
+                            {% if c_passages %}
+                            	{% for passage in c_passages %}
+                                    <div class="rounded-3 d-flex align-items-center gap-1 car-filter-area justify-content-between ps-4 pe-4 pt-2 pb-2" style="background: #F2EAF9;">
+                                        <div class="d-flex flex-column gap-3">
+                                            <div class="d-flex flex-column">
+                                                <span class="text-truncate" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);max-width: 15vw;" title="{{ passage['car']['car_model'].upper() }}">{{ passage['car']['car_model'].upper() }}</span>
+                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);">{{ passage['car']['govern_num'].upper() }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);">СТАТУС:</span>
+                                                <span class="status" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">{{ 'ВЪЕЗД' if passage['status'] else "ВЫЕЗД" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-3">
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span>
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%d.%m.%Y') }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span>
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%H:%M') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                            	{% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="border-2 shadow-lg d-flex flex-fill rounded-3"></div><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ПОСЕТИТЕЛИ</span>
-                    <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 95%;max-height: 80vh;">
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
+                <div class="col shadow-lg rounded-3">
+                    <div class="d-flex flex-column"
+                    ><span style="text-align: center;color: #000000;font-size: calc((1vh + 1vw) * 0.7);font-weight: 600;">СПЕЦТРАНСПОРТ</span>
+                        <div class="d-flex justify-content-between p-1" style="height: 10vh;">
+                            <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">Тип спецтраспорта</span>
+                                <select class="form-select m-0 spec-filter-type" onchange="filterSpecCars()">
+                                    <optgroup label="Выберите тип спецтранспорта">
+                                        <option value="0" selected="">Все типы</option>
+                                        <option value="ДРУГОЕ">Другое</option>
+                                        <option value="СКОРАЯ ПОМОЩЬ">Скорая помощь</option>
+                                        <option value="ПОЖАРНАЯ СЛУЖБА">Пожарная служба</option>
+                                        <option value="ПОЛИЦИЯ">Полиция</option>
+                                        <option value="ГАЗОВАЯ СЛУЖБА">Газовая служба</option>
+                                    </optgroup>
+                                </select></div>
+                            <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">Статус</span>
+                                <select class="form-select m-0 spec-filter-status" onchange="filterSpecCars()">
+                                    <optgroup label="Выберите статус">
+                                        <option value="0" selected>Все статусы</option>
+                                        <option value="ВЪЕЗД">Въезд</option>
+                                        <option value="ВЫЕЗД">Выезд</option>
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
-                        </div>
-                        <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2" pb-2="" style="background: #e8fff8;">
-                            <div class="d-flex flex-column"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">ИВАНОВИЧ</span></div>
-                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span><span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span><span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">Text</span></div>
+                        <div class="p-2 overflow-auto d-flex flex-column gap-2" style="height: 85%;max-height: 70vh">
+
+                            {% if s_passages %}
+                                {% for passage in s_passages %}
+                                    <div class="rounded-3 d-flex align-items-center gap-1 justify-content-between ps-4 pe-4 pt-2 pb-2 spec-filter-area" style="background: #FEEFD1;">
+                                        <div class="d-flex flex-column gap-3">
+                                            <div class="d-flex gap-2">
+                                                <div class="d-flex flex-column">
+                                                    <span class="text-truncate" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);max-width: 10vw;" title="{{ passage['car']['car_model'].upper() }}">{{ passage['car']['car_model'].upper() }}</span>
+                                                    <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);">{{ passage['car']['govern_num'].upper() }}</span>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <span class="type" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);">{{ passage['car']['transport_type']['type'].upper() }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);">СТАТУС:</span>
+                                                <span class="status" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.7);">{{ 'ВЪЕЗД' if passage['status'] else "ВЫЕЗД" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-3">
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.5);">ДАТА:</span>
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%d.%m.%Y') }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span style="font-size: calc((1vh + 1vw) * 0.5);">ВРЕМЯ</span>
+                                                <span style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;">{{ passage["pass_date"]|datefilter('%H:%M') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../static/js/sidebar.js"></script>
-</body>
+{% endblock %}
 
-</html>
+
+{% block additional_scripts_end %}
+    <script src="{{ url_for('static', filename='/js/bs-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/filterCars.js') }}"></script>
+{% endblock %}
