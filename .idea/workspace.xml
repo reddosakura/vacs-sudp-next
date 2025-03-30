@@ -4,22 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1b08d13-db4f-4b7b-be79-39b3dfd6a7eb" name="Changes" comment="commit #1 Сделан модуль мониторинга без видеонаблюдения">
-      <change afterPath="$PROJECT_DIR$/modules/passage_report/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/passage_report/passage_report_app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/bs-init.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/filterCars.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/searchMonitoring.js" afterDir="false" />
+    <list default="true" id="a1b08d13-db4f-4b7b-be79-39b3dfd6a7eb" name="Changes" comment="commit #1 Доделан поиск в мониторинге и полностью завершен модуль отчетов по проходам">
+      <change afterPath="$PROJECT_DIR$/modules/camera/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/camera/camera_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/request_repotrts/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/request_repotrts/request_report_app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/set_checked.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_accordion_item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/inc/_monitoring_panel.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/camera.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/pages/request_report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/monitoring/monitoring_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/monitoring/monitoring_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/processing/processing_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/processing/processing_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/requests/request_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/requests/request_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/inc/_sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inc/_sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inc/_user_card.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inc/_user_card.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/pages/monitoring.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/monitoring.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/pages/passages.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/passages.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/report.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,9 +31,9 @@
       <list>
         <option value="Flask Main" />
         <option value="CSS File" />
-        <option value="HTML File" />
-        <option value="Python Script" />
         <option value="JavaScript File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -61,30 +61,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Flask server.vacs-sudp-next.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/alexa/PycharmProjects/vacs-sudp-next/static/js&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Flask server.vacs-sudp-next.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/alexa/PycharmProjects/vacs-sudp-next/templates/pages",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\js" />
       <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\templates\pages" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\templates\inc" />
+      <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\js" />
       <recent name="C:\Users\LatishevAE\PycharmProjects\vacs-sudp-next\static\img" />
       <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\static\img" />
-      <recent name="C:\Users\LatishevAE\PycharmProjects\vacs-sudp-next\static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alexa\PycharmProjects\vacs-sudp-next\modules\processing" />
@@ -148,6 +148,8 @@
       <workItem from="1743158073254" duration="6444000" />
       <workItem from="1743182156148" duration="10092000" />
       <workItem from="1743239542015" duration="25186000" />
+      <workItem from="1743284707079" duration="155000" />
+      <workItem from="1743333592145" duration="18079000" />
     </task>
     <task id="LOCAL-00001" summary="commit #1 много что сделано, куча чего исправлено">
       <option name="closed" value="true" />
@@ -165,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743112831476</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="commit #1 Доделан поиск в мониторинге и полностью завершен модуль отчетов по проходам">
+      <option name="closed" value="true" />
+      <created>1743284811070</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1743284811070</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,9 +184,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit #1 много что сделано, куча чего исправлено" />
     <MESSAGE value="commit #1 Сделан модуль мониторинга без видеонаблюдения" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit #1 Сделан модуль мониторинга без видеонаблюдения" />
+    <MESSAGE value="commit #1 Доделан поиск в мониторинге и полностью завершен модуль отчетов по проходам" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit #1 Доделан поиск в мониторинге и полностью завершен модуль отчетов по проходам" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/vacs_sudp_next$vacs_sudp_next.coverage" NAME="vacs-sudp-next Coverage Results" MODIFIED="1743281515776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/vacs_sudp_next$vacs_sudp_next.coverage" NAME="vacs-sudp-next Coverage Results" MODIFIED="1743359239216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

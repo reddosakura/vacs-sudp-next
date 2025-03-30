@@ -2,9 +2,11 @@ from datetime import datetime
 
 from flask import Flask, redirect
 from modules.auth.auth_app import authbp
+from modules.camera.camera_app import cambp
 from modules.monitoring.monitoring_app import monbp
 from modules.passage_report.passage_report_app import passagebp
 from modules.processing.processing_app import procbp
+from modules.request_repotrts.request_report_app import repbp
 from modules.requests.request_app import reqbp
 from modules.users.users_app import usersbp
 
@@ -16,6 +18,8 @@ app.register_blueprint(reqbp, url_prefix='/requests')
 app.register_blueprint(procbp, url_prefix='/processing')
 app.register_blueprint(monbp, url_prefix='/monitoring')
 app.register_blueprint(passagebp, url_prefix='/passages')
+app.register_blueprint(cambp, url_prefix='/camera')
+app.register_blueprint(repbp, url_prefix='/reports')
 
 
 @app.template_filter("datefilter")

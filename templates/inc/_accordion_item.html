@@ -1,0 +1,188 @@
+
+{% if req_status['name'] == "Согласование" %}
+    {% set color = "#98B3F9" %}
+{% elif req_status['name'] == "Одобрена" %}
+    {% set color = "#94FBB1" %}
+{% elif req_status['name'] == "Отклонена" %}
+    {% set color = "#F69595" %}
+{% elif req_status['name'] == "Отозвана" %}
+    {% set color = "#DDA8E2" %}
+{% elif req_status['name'] == "Рассмотрение" %}
+    {% set color = "#E698F9" %}
+{% elif req_status['name'] == "Закрыта" %}
+    {% set color = "#DCDBDB" %}
+{% elif req_status['name'] == "Прошла согласование" %}
+    {% set color = "#DDFF94" %}
+{% elif req_status['name'] == "Не прошла согласование" %}
+    {% set color = "#FBB4A5" %}
+{% else %}
+    {% set color = "#E25D5D" %}
+{% endif %}
+
+
+{% if approval['status']['name'] == "Прошла согласование" %}
+    {% set color_appr = "#DDFF94" %}
+{% elif approval['status']['name'] == "Не прошла согласование" %}
+    {% set color_appr = "#FBB4A5" %}
+{% elif approval['status']['name'] == "Отклонена" %}
+    {% set color_appr = "#F69595" %}
+{% elif approval['status']['name'] == "Одобрена" %}
+    {% set color_appr = "#94FBB1" %}
+{% else %}
+
+{% endif %}
+
+
+<div class="accordion-item m-0 p-0 d-flex flex-column gap-2 border-0">
+    <h2 class="accordion-header mb-2" role="tab">
+        <button class="accordion-button d-flex collapsed shadow rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#accordionRequests .item-{{ req_id }}" aria-expanded="true" aria-controls="accordionRequests .item-1">
+            <div class="d-flex justify-content-between flex-fill">
+                <div class="d-flex" >
+                    <span class="flex-fill p-2 border border-0 rounded-2 text-center" style="font-size: calc((1vh + 1vw) * 0.65);background: {{ color }};font-weight: bold;width: 35vh">{{ req_status['name'].upper() }}</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <span style="font-size: calc((1vh + 1vw) * 0.85);font-weight: bold;">Заявка №{{ req_id }}</span>
+                </div>
+                <div class="me-3">
+                    <div class="d-flex flex-fill align-items-center gap-4">
+                        <div class="d-flex flex-column">
+                            <span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Заявитель</span>
+                            <span style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ creator['name'][0] }}. {{ creator['patronymic'][0] if creator['patronymic'] else None }}. {{ creator['lastname'] }}</span>
+                        </div>
+                        <div class="d-flex flex-column" style="font-size:calc((1vh + 1vw) * 0.9);">
+                            <span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Тип заявки</span>
+                            <span style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ req_type['name'].upper() }}</span>
+                        </div>
+                        <div class="d-flex flex-column" style="font-size:calc((1vh + 1vw) * 0.9);">
+                            <span style="font-size: calc((1vh + 1vw) * 0.35);color: #d4d4d4;">Дата создания</span>
+                            <span style="font-size: calc((1vh + 1vw) * 0.5);font-weight: 600;">{{ created_date|datefilter('%H:%M %d.%m.%Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </button>
+    </h2>
+    <div class="accordion-collapse collapse item-{{ req_id }} border border-1 rounded-2" role="tabpanel" data-bs-parent="#accordionRequests">
+        <div class="accordion-body d-flex" style="min-height: 80vh">
+            <div class="flex-fill d-flex flex-column">
+                <div class="d-flex flex-fill flex-column" style="height: 15%;">
+                    <div class="d-flex flex-fill gap-2">
+                        <div class="col-4 gap-2 d-flex flex-column">
+                            <div class="d-flex flex-column">
+                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p>
+                                <span class="border rounded border-0 shadow m-0 p-0 fw-semibold" style="text-align: center;">С {{ from_date|datefilter('%d.%m.%Y') }} ПО {{ to_date|datefilter('%d.%m.%Y') }}</span>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ДОГОВОР</p>
+                                <span class="border rounded border-0 shadow m-0 p-0 fw-semibold" style="text-align: center;">{{ contract if contract else 'ДОГОВОР НЕ УКАЗАН' }}</span>
+                            </div>
+                        </div>
+                        <div class="col gap-2 d-flex flex-column">
+                            <div class="d-flex gap-2">
+                                <div class="d-flex flex-column flex-fill">
+                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ВРЕМЯ ДЕЙСТВИЯ ЗАЯВКИ</p>
+                                    <span class="border rounded border-0 shadow m-0 p-0 fw-semibold" style="text-align: center;">С {{ from_time|timefilter('%H:%M') }} ДО {{ to_time|timefilter('%H:%M') }}</span>
+                                </div>
+                                <div class="d-flex flex-column flex-fill">
+                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p>
+                                    <span class="border rounded border-0 shadow m-0 p-0 fw-semibold" style="text-align: center;">{{ passmode['name'].upper() }}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex flex-column">
+                                    <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p>
+                                    <span class="border rounded border-0 shadow m-0 p-0 fw-semibold" style="text-align: center;">{{ organization.upper() if organization else 'ОРГАНИЗАЦИЯ НЕ УКАЗАНА' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-fill flex-column" style="height: 85%;">
+                    <div class="d-flex flex-fill gap-2" style="height: 90%;">
+                        <div class="col overflow-auto border border-0 rounded-3 shadow">
+                            <div class="border-0 shadow flex-grow-1 rounded-3 d-flex flex-column"><span class="fw-semibold position-sticky" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
+                                <div class="p-2 d-flex flex-column gap-2 overflow-auto">
+                                    {% if visitors %}
+
+                                        {% for visitor in visitors %}
+                                            <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap">
+                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['lastname'].upper() }}</span>
+                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['name'].upper() }}</span>
+                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['patronymic'].upper() if visitor['patronymic'] else None }}</span>
+                                            </div>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <p class="align-self-center">НЕТ ПРИКРЕПЛЕННЫХ ПОСЕТИЛЕЙ</p>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col overflow-auto border border-0 rounded-3 shadow">
+                            <div class="border-0 shadow d-flex flex-column flex-fill rounded-3"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
+                                <div class="p-2 overflow-auto d-flex flex-column gap-2">
+
+                                    {% if cars %}
+
+                                        {% for car in cars %}
+                                            <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                                                <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4">
+                                                    <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ car['car_model'].upper() }}</span>
+                                                    <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['govern_num'].upper() }}</span>
+                                                </div>
+                                                <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top">
+                                                    {% if car['driver'] %}
+                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['driver']['lastname'] }} {{ car['driver']['name'] }} {{ car['driver']['patronymic'] if car['driver']['patronymic'] }}</span>
+                                                    {% else %}
+                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>
+                                                    {% endif %} 
+
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <p class="align-self-center">НЕТ ПРИКРЕПЛЕННЫХ ПОСЕТИЛЕЙ</p>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col d-flex flex-column border border-0 rounded-3 shadow">
+
+                            {% if approval %}
+                                <span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">СТАТУС СОГЛАСОВАНИЯ</span>
+                                    <div class="p-2 overflow-auto d-flex flex-column gap-2 flex-fill">
+                                    <div class="d-flex flex-column gap-2">
+                                        <span><b>{{ approval['userobj']['lastname'].upper() }} {{ approval['userobj']['name'].upper() }} {{ approval['userobj']['patronymic'].upper() if approval['userobj']['patronymic'] }}</b> ИЗМЕНИЛ(А) СТАТУС ЗАЯВКИ:</span>
+                                        <span class="p-1 text-center border border-0 rounded-2" style="background: {{ color_appr }};font-weight: bold;">{{ approval['status']['name'].upper() }}</span>
+                                        <span>Дата и время: {{ approval['created_date']|datefilter('%H:%M %d.%m.%Y') }}</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2 flex-fill">
+                                        <span>Комментарий:</span>
+                                        <span class="flex-fill border border-1 rounded-2 p-1">{{ approval['comment'] if approval['comment'] else 'КОММЕНТАРИЙ НЕ УКАЗАН' }}</span>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="flex-fill p-1">ЗАЯВКА ЕЩЕ В ОБРАБОТКЕ</p>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                    <div class="d-flex flex-fill justify-content-between" style="height: 10%;">
+                        <div class="d-flex align-items-center gap-2 flex-fill">
+                            <div class="d-flex align-items-center justify-content-center border rounded-3" style="width: 2.5rem;height: 2.5rem;background: #678aff;" data-bs-target="#file-modal" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark" style="font-size: 1.5rem;color: var(--bs-body-bg);">
+                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>
+                                </svg></div><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>
+                        </div>
+                        <div class="d-flex flex-fill">
+                            <form class="d-flex gap-2 flex-fill align-items-center"><input class="btn btn-primary flex-fill" type="submit" value="РЕДАКТИРОВАТЬ"><input class="btn btn-primary flex-fill" type="submit" value="ОТОЗВАТЬ"></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

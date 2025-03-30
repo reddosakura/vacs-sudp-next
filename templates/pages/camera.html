@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block additional_scripts_head %}
+    <script src="{{ url_for('static', filename="/js/set_checked.js") }}"></script>
+{% endblock %}
+
+{% block main %}
+
+    {% include 'inc/_sidebar.html' %}
+
+    <div class="d-flex flex-fill p-2 gap-2">
+        <div class="d-flex flex-fill flex-column">
+            <div class="d-flex flex-column flex-fill gap-2" style="max-height: 100vh;">
+
+                {% include 'inc/_monitoring_panel.html' %}
+
+                <div class="border-2 d-flex flex-column gap-2 border rounded-2" style="height:95%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_scripts_end %}
+    <script src="{{ url_for('static', filename="/js/set_checked.js") }}"></script>
+{% endblock %}

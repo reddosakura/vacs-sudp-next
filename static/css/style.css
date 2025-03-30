@@ -224,3 +224,17 @@ mark.animate {
     font-size: 1em;
     align-items: center;
 }
+
+.accordion-button:not(.collapsed) {
+    color: black;
+    background-color: white;
+    box-shadow: none;
+    border: 2px solid var(--main-color);
+}
+
+/*.accordion-button .collapsed {*/
+/*    color: black;*/
+/*    background-color: white;*/
+/*    box-shadow: none;*/
+/*    border: none;*/
+/*}*/
