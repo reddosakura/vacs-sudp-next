@@ -49,6 +49,17 @@ ROLES = [
     ("4", "СУПЕРПОЛЬЗОВАТЕЛЬ"),
 ]
 
+STATUSES = [
+    ("0", "Все статусы"),
+    ("Согласование", "Согласование"),
+    ("Одобрена", "Одобрена"),
+    ("Отклонена", "Отклонена"),
+    ("Отозвана", "Отозвана"),
+    ("Рассмотрение", "Рассмотрение"),
+    ("Закрыта", "Закрыта"),
+    ("Прошла согласование", "Не прошла согласование"),
+]
+
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
@@ -131,13 +142,20 @@ class SpecTransportForm(FlaskForm):
     pass_spec_submit = SubmitField("ПРОПУСТИТЬ")
 
 
-class FilterSearchForm(FlaskForm):
+class PassagesFilterSearchForm(FlaskForm):
     search_field = StringField(render_kw={"placeholder": "ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ"})
     filter_fdate = DateField("filter_fdate", default=date.today)
     filter_tdate = DateField("filter_tdate", default=date.today)
     filter_ftime = TimeField("filter_ftime", default=datetime.datetime.strptime("00:00:00", "%H:%M:%S").time())
     filter_ttime = TimeField("filter_ttime", default=datetime.datetime.strptime("23:59:00", "%H:%M:%S").time())
     apply_button = SubmitField("ПОИСК ПО УКАЗАННЫМ КРИТЕРИЯМ")
+
+
+class RequestFilterSearchForm(FlaskForm):
+    search_field = StringField(render_kw={"placeholder": "ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ"})
+    filter_fdate = DateField("filter_fdate", default=date.today)
+    filter_tdate = DateField("filter_tdate", default=date.today)
+    status_select = SelectField('status', choices=STATUSES)
 
 
 class RecallForm(FlaskForm):

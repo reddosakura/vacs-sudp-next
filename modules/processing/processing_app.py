@@ -305,6 +305,8 @@ def _process_request(form: ProcessRequestForm, mode: str, user_role: str):
             data=update_request_payload
         )
 
+        # print(update_request.status_code, update_request.json())
+
         if update_request.status_code != 204:
             raise FailWhileProcessing(f"НЕ УДАЛОСЬ ОБРАБОТАТЬ ЗАЯВКУ. ПУЛ СОГЛАСОВАНИЯ ВЕРНУЛ КОД: {update_request.status_code}")
         return

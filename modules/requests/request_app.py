@@ -173,6 +173,7 @@ def create():
                     flash(f"Не удалось прикрепить посетителей к завке. Сервис API вернул код: {add_visitor_request.status_code}", "alert-danger")
                     return redirect("/requests/")
 
+
             if form.cars_list.data:
 
                 car_types_request = build_request(

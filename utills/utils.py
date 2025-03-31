@@ -33,7 +33,7 @@ def build_request(url: str,
             )
 
     elif method == "POST":
-        print(data, "<-- data")
+        # print(data, "<-- data")
         with httpx.Client() as client:
             response = client.post(
                 url,
@@ -47,7 +47,7 @@ def build_request(url: str,
             # print(response.json())
 
     elif method == "PUT":
-        pprint(data)
+        # pprint(data)
         print("<-- data")
         with httpx.Client() as client:
             response = client.put(

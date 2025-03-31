@@ -4,6 +4,7 @@ from pprint import pprint
 import httpx
 from flask import Blueprint, render_template, request, flash, redirect
 
+from forms import RequestFilterSearchForm
 from utills.utils import build_request
 
 repbp = Blueprint('repbp', __name__)
@@ -11,6 +12,7 @@ repbp = Blueprint('repbp', __name__)
 
 @repbp.route('/')
 def index():
+    form = RequestFilterSearchForm()
     try:
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
@@ -27,11 +29,26 @@ def index():
             flash('Request list not found.')
             return render_template("pages/request_report.html", user={"role": None})
 
-        pprint(requests_actual.json(), sort_dicts=False)
-        print(len(requests_actual.json()['requests']))
+        # pprint(requests_actual.json(), sort_dicts=False)
+        # print(len(requests_actual.json()['requests']))
 
-        return render_template("pages/request_report.html", user=user.json(), requests_data=requests_actual.json()['requests'])
+        return render_template("pages/request_report.html",
+                               user=user.json(),
+                               requests_data=requests_actual.json()['requests'],
+                               form=form
+                               )
 
     except httpx.ConnectError:
         flash('Request list not found.')
         return render_template("pages/request_report.html", user={"role": None})
+
+
+
+@repbp.route('/search', methods=['GET'])
+def search():
+    form = RequestFilterSearchForm(request.args)
+    # if form.validate_on_submit():
+    print(form.data)
+
+    return redirect("/reports")
+    # return render_template("pages/request_report.html")

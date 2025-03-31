@@ -20,6 +20,7 @@
 {% endif %}
 
 
+{% if approval %}
 {% if approval['status']['name'] == "Прошла согласование" %}
     {% set color_appr = "#DDFF94" %}
 {% elif approval['status']['name'] == "Не прошла согласование" %}
@@ -29,6 +30,8 @@
 {% elif approval['status']['name'] == "Одобрена" %}
     {% set color_appr = "#94FBB1" %}
 {% else %}
+
+{% endif %}
 
 {% endif %}
 
@@ -165,7 +168,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <p class="flex-fill p-1">ЗАЯВКА ЕЩЕ В ОБРАБОТКЕ</p>
+                                <p class="flex-fill p-1 align-self-center fs-4">ЗАЯВКА НАХОДИТСЯ В ОБРАБОТКЕ</p>
                             {% endif %}
 
 

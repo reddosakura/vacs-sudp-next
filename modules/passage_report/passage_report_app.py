@@ -3,8 +3,7 @@ import datetime
 import httpx
 from flask import Blueprint, render_template, request, flash, redirect
 from werkzeug.security import check_password_hash
-
-from forms import FilterSearchForm
+from forms import PassagesFilterSearchForm
 from utills.enums import Scopes
 from utills.utils import build_request
 
@@ -14,7 +13,7 @@ passagebp = Blueprint('passagebp', __name__)
 @passagebp.route('/')
 def index():
     user_role = request.cookies.get("role")
-    form = FilterSearchForm()
+    form = PassagesFilterSearchForm()
     try:
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
@@ -84,7 +83,7 @@ def filtered():
             check_password_hash(user_role, Scopes.REQUESTER.value)):
         is_admin = True
 
-    form = FilterSearchForm(request.args)
+    form = PassagesFilterSearchForm(request.args)
 
     if form.search_field.data:
         # url_cars = f"http://localhost:3004/api/v3/passage/list?ftime={form.filter_ftime.data}&ttime={form.filter_ttime.data}&fdate={form.filter_fdate.data}&tdate={form.filter_tdate.data}"
