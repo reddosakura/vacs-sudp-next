@@ -35,12 +35,8 @@
                              <p class="p-0 m-0 align-content-center" style="font-size: .75rem;"><strong>ЗАПОЛНИТЬ СПИСКИ ПОСЕТИТЕЛЕЙ И АВТОТРАНСПОРТА </strong><br/><strong>ИЗ ШАБЛОНА MICROSOFT WORD</strong></p>
                         </label>
                     </div>
-                    <div class="flex-fill d-flex align-items-center gap-2">
-                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 3em;height: 3em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1.5em;height: 1.5em;">
-                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                            </svg></div>
-                        <p class="p-0 m-0" style="font-size: .75rem;"><strong>СОЗДАТЬ ЗАЯВКУ НА ОСНОВЕ СУЩЕСТВУЮЩЕЙ</strong></p>
+                    <div class="flex-fill d-flex align-items-center justify-content-end gap-2">
+                        <p class="p-0 m-0" style="font-size: 2rem;"><strong>ЗАЯВКА №{{ id }}</strong></p>
                     </div>
                 </div>
                 <div class="d-flex gap-4" style="height: 90%;">
@@ -48,13 +44,21 @@
                         <div class="flex-fill d-flex flex-column gap-2" style="height: 50%;">
                             <div class="d-flex add-visitor-subform" style="height: 10%;"><button class="btn btn-primary fw-semibold border-0 flex-fill" type="button" style="background: #678aff;">+ ДОБАВИТЬ ПОСЕТИТЕЛЯ</button></div>
                             <div id="visitors_list_container" class="d-flex flex-column gap-2 p-2 overflow-auto shadow rounded-3" style="height: 90%;max-height: 35vh;">
-
+                                {% for v in form.visitors_list.entries %}
+                                    {% with v_id=v.form.v_id(class="visually-hidden"), lastname=v.form.lastname(class="form-control", required="true", placeholder="ФАМИЛИЯ", style="font-weight: 600;"), name=v.form.name(class="form-control", required="true", placeholder="ИМЯ", style="font-weight: 600;"), patronymic=v.form.patronymic(class="form-control", placeholder="ОТЧЕСТВО", style="font-weight: 600;") %}
+                                        {% include 'inc/_visitor_element.html' %}
+                                    {% endwith %}
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="flex-fill d-flex flex-column gap-2" style="height: 50%;">
                             <div class="d-flex add-car-subform" style="height: 10%;"><button class="btn btn-primary fw-semibold border-0 flex-fill" type="button" style="background: #678aff;">+ ДОБАВИТЬ АВТОМОБИЛЬ</button></div>
                             <div id="cars_list_container" class="overflow-auto d-flex flex-column gap2 p-2 shadow rounded-3" style="height: 90%;max-height: 35vh;">
-
+                             {% for c in form.cars_list.entries %}
+                                    {% with c_id=c.c_id(class="visually-hidden"), carmodel=c.car_model(class="form-control fs-5 regular-input"), govern_num=c.govern_num(class="form-control fs-5 regular-input govern_num") %}
+                                        {% include 'inc/_car_element.html' %}
+                                    {% endwith %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -849,18 +853,18 @@
 
         }
     </script>
-    <script>
-        const fileInput = document.getElementById("add_files_btn");
-
-        fileInput.addEventListener("change", (event) => {
-          const files = event.target.files;
-          let files_block = $('#files-block').empty();
-          for (let i = 0; i < files.length; i++) {
-              //let html = `<div class="file-item container-fluid mh-90 p-2 mt-2 mb-2 rounded-4 text-label"><div class="row"><div class="col d-flex align-content-center"><div class="text-truncate w-100 text-center fs-4">${files[i].name}</div></div></div></div>`;
-              //let html = `<div class="shadow m-1 rounded-2" style="height: 5vh;"></div>`;
-              let html = `<div class="shadow m-1 rounded-2 d-flex align-items-center p-1 d-flex" style="height: 5vh;"><span class="flex-fill text-start">${files[i].name}</span></div>`;
-              files_block.append(html);
-          }
-        });
-    </script>
+{#    <script>#}
+{#        const fileInput = document.getElementById("add_files_btn");#}
+{##}
+{#        fileInput.addEventListener("change", (event) => {#}
+{#          const files = event.target.files;#}
+{#          let files_block = $('#files-block').empty();#}
+{#          for (let i = 0; i < files.length; i++) {#}
+{#              //let html = `<div class="file-item container-fluid mh-90 p-2 mt-2 mb-2 rounded-4 text-label"><div class="row"><div class="col d-flex align-content-center"><div class="text-truncate w-100 text-center fs-4">${files[i].name}</div></div></div></div>`;#}
+{#              //let html = `<div class="shadow m-1 rounded-2" style="height: 5vh;"></div>`;#}
+{#              let html = `<div class="shadow m-1 rounded-2 d-flex align-items-center p-1 d-flex" style="height: 5vh;"><span class="flex-fill text-start">${files[i].name}</span></div>`;#}
+{#              files_block.append(html);#}
+{#          }#}
+{#        });#}
+{#    </script>#}
 {% endblock %}

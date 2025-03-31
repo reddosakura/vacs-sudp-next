@@ -10,12 +10,12 @@ from wtforms.validators import DataRequired, Optional, Regexp
 from flask_wtf.file import FileAllowed
 
 TIME_INTERVALS = [
-    ("1", "С 5:00 ДО 15:00"),
-    ("2", "С 5:00 ДО 18:00"),
-    ("3", "С 5:00 ДО 21:30"),
-    ("4", "C 7:30 ДО 21:00"),
-    ("5", "С 9:00 ДО 12:00"),
-    ("6", "С 9:00 ДО 17:00"),
+    ("1", "С 05:00 ДО 15:00"),
+    ("2", "С 05:00 ДО 18:00"),
+    ("3", "С 05:00 ДО 21:30"),
+    ("4", "C 07:30 ДО 21:00"),
+    ("5", "С 09:00 ДО 12:00"),
+    ("6", "С 09:00 ДО 17:00"),
     ("7", "С 12:00 ДО 15:00"),
     ("8", "С 15:00 ДО 17:15"),
     ("9", "КРУГЛОСУТОЧНО"),
@@ -57,7 +57,8 @@ STATUSES = [
     ("Отозвана", "Отозвана"),
     ("Рассмотрение", "Рассмотрение"),
     ("Закрыта", "Закрыта"),
-    ("Прошла согласование", "Не прошла согласование"),
+    ("Прошла согласование", "Прошла согласование"),
+    ("Не прошла согласование", "Не прошла согласование"),
 ]
 
 class MultiCheckboxField(SelectMultipleField):
@@ -87,7 +88,7 @@ class VisitorSubForm(wtforms.Form):
 
 
 class CarSubForm(wtforms.Form):
-    carmodel = StringField('model', validators=[DataRequired()])
+    car_model = StringField('model', validators=[DataRequired()])
     govern_num = StringField('govern_num', validators=[DataRequired()])
     c_id = StringField("id")
     # visitor = SelectField("visitor", coerce=int,  validate_choice=False)
@@ -107,7 +108,7 @@ class RequestForm(FlaskForm):
     visitors_list = FieldList(FormField(VisitorSubForm))
     cars_list = FieldList(FormField(CarSubForm))
 
-    add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
+    # add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
     create_btn = SubmitField('СОЗДАТЬ')
 
 
@@ -153,8 +154,8 @@ class PassagesFilterSearchForm(FlaskForm):
 
 class RequestFilterSearchForm(FlaskForm):
     search_field = StringField(render_kw={"placeholder": "ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ"})
-    filter_fdate = DateField("filter_fdate", default=date.today)
-    filter_tdate = DateField("filter_tdate", default=date.today)
+    filter_fdate = DateField("filter_fdate")
+    filter_tdate = DateField("filter_tdate")
     status_select = SelectField('status', choices=STATUSES)
 
 

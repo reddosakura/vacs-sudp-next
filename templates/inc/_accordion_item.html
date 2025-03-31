@@ -108,10 +108,10 @@
                                     {% if visitors %}
 
                                         {% for visitor in visitors %}
-                                            <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap">
+                                            <div class="border rounded border-2 rounded-3 d-flex flex-column align-items-start gap-1 justify-content-center ps-4 flex-wrap  {{ 'visually-hidden' if not reported and visitor['is_deleted'] }}">
                                                 <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['lastname'].upper() }}</span>
                                                 <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['name'].upper() }}</span>
-                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['patronymic'].upper() if visitor['patronymic'] else None }}</span>
+                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ visitor['patronymic'].upper() if visitor['patronymic'] }}</span>
                                             </div>
                                         {% endfor %}
 
@@ -129,7 +129,7 @@
                                     {% if cars %}
 
                                         {% for car in cars %}
-                                            <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center">
+                                            <div class="border rounded border-2 rounded-3 d-flex flex-column gap-1 justify-content-center {{ 'visually-hidden' if not reported and car['is_deleted'] }}">
                                                 <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4">
                                                     <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ car['car_model'].upper() }}</span>
                                                     <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['govern_num'].upper() }}</span>
@@ -137,8 +137,8 @@
                                                 <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top">
                                                     {% if car['driver'] %}
                                                     	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['driver']['lastname'] }} {{ car['driver']['name'] }} {{ car['driver']['patronymic'] if car['driver']['patronymic'] }}</span>
-                                                    {% else %}
-                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>
+{#                                                    {% else %}#}
+{#                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>#}
                                                     {% endif %} 
 
                                                 </div>
@@ -176,12 +176,16 @@
                     </div>
                     <div class="d-flex flex-fill justify-content-between" style="height: 10%;">
                         <div class="d-flex align-items-center gap-2 flex-fill">
-                            <div class="d-flex align-items-center justify-content-center border rounded-3" style="width: 2.5rem;height: 2.5rem;background: #678aff;" data-bs-target="#file-modal" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark" style="font-size: 1.5rem;color: var(--bs-body-bg);">
-                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>
-                                </svg></div><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>
+{#                            <div class="d-flex align-items-center justify-content-center border rounded-3" style="width: 2.5rem;height: 2.5rem;background: #678aff;" data-bs-target="#file-modal" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark" style="font-size: 1.5rem;color: var(--bs-body-bg);">#}
+{#                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>#}
+{#                                </svg></div>#}
+{#                            <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>#}
                         </div>
                         <div class="d-flex flex-fill">
-                            <form class="d-flex gap-2 flex-fill align-items-center"><input class="btn btn-primary flex-fill" type="submit" value="РЕДАКТИРОВАТЬ"><input class="btn btn-primary flex-fill" type="submit" value="ОТОЗВАТЬ"></form>
+                            <form class="d-flex gap-2 flex-fill align-items-center">
+                                <a class="btn btn-primary flex-fill" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
+                                <input class="btn btn-primary flex-fill" type="submit" value="ОТОЗВАТЬ">
+                            </form>
                         </div>
                     </div>
                 </div>

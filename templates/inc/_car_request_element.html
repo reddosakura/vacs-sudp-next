@@ -2,7 +2,7 @@
     <div class="d-flex flex-column gap-1 flex-fill justify-content-center ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.8);">{{ carmodel.upper() }}</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ govern_number.upper() }}</span></div>
     {% if visitor %}
         <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ visitor['lastname'].upper() }} {{ visitor['name'].upper() }} {{ visitor['patronymic'].upper() if visitor['patronymic'].upper() else '' }}</span></div>
-    {% else %}
-        <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></div>
+{#    {% else %}#}
+{#        <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span></div>#}
     {% endif %}
 </div>
