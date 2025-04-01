@@ -18,15 +18,17 @@
             <div class="text-nowrap"><span class="text m-0" style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.5);color: #d4d4d4;">СИСТЕМА УПРАВЛЕНИЯ<br />ДОСТУПОМ ПОСЕТИТЕЛЕЙ</span></div>
         </div>
         <ul class="d-flex flex-column gap-3">
-            <li class="justify-content-start">
-                <a style="all: unset;" class="d-flex" href="/users/">
-                    <svg class="bi bi-person-bounding-box icon p-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
-                        <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"></path>
-                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
-                    </svg>
-                    <span class="text visually-hidden">УЧЕТНЫЕ <br />ЗАПИСИ</span>
-                </a>
-            </li>
+            {% if user["role"]['name'] == 'Суперпользователь' %}
+                <li class="justify-content-start">
+                    <a style="all: unset;" class="d-flex" href="/users/">
+                        <svg class="bi bi-person-bounding-box icon p-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(222,226,230);border-width: .155vw;border-style: solid;border-radius: .15em;">
+                            <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"></path>
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                        </svg>
+                        <span class="text visually-hidden">УЧЕТНЫЕ <br />ЗАПИСИ</span>
+                    </a>
+                </li>
+            {% endif %}
 
             <li class="justify-content-start">
                 <a style="all: unset;" class="d-flex" href="/requests/">
@@ -73,7 +75,7 @@
                 </a>
             </li>
         </ul>
-        <div class="d-flex align-items-center justify-content-start gap-2">
+        <div class="d-flex align-items-center justify-content-start gap-2" data-bs-target="#userProfileModalLabel" data-bs-toggle="modal">
             {% if user['name'] %}
                 <img class="p-1 {{ color }}" src="{{ url_for('static', filename='img/user-icon-role.svg') }}" style="max-height: 4.5vh;border-radius: .3em;" />
             {% else %}

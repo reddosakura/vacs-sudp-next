@@ -35,7 +35,8 @@ def index():
         return render_template("pages/request_report.html",
                                user=user.json(),
                                requests_data=requests_.json()['requests'],
-                               form=form
+                               form=form,
+                               is_reports=True
                                )
 
     except httpx.ConnectError:
@@ -88,7 +89,8 @@ def search():
             return render_template("pages/request_report.html",
                                    user=user.json(),
                                    requests_data=requests_.json()['requests'],
-                                   form=form
+                                   form=form,
+                                   is_reports=True
                                    )
     except httpx.ConnectError:
         flash('НЕ УДАЛОСЬ СВЯЗАТЬСЯ С СЕРВИСОМ ЗАЯВОК. API НЕДОСТУПЕН')

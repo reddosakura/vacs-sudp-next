@@ -5,6 +5,16 @@
     <div class="d-flex flex-fill pb-2 pt-2 pe-2 gap-2">
         {% include 'inc/_sidebar.html' %}
         <div class="d-flex flex-fill flex-column gap-3">
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class=flashes>
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible align-self-center m-auto fs-3 text-center" role="alert"><span>{{ message }}</span></div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
             <div class="d-flex" style="height: 5%;">
                 <form class="d-flex flex-fill flex-column gap-2" action="/requests/search">
                     <div class="d-flex flex-fill gap-2">

@@ -108,7 +108,7 @@ class RequestForm(FlaskForm):
     visitors_list = FieldList(FormField(VisitorSubForm))
     cars_list = FieldList(FormField(CarSubForm))
 
-    # add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
+    add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
     create_btn = SubmitField('СОЗДАТЬ')
 
 
@@ -197,13 +197,14 @@ class CreateUserForm(FlaskForm):
 
 
 class UpdateUserForm(FlaskForm):
-    lastname = StringField('lastname', validators=[DataRequired()])
-    name = StringField('name', validators=[DataRequired()])
-    patronymic = StringField('patronymic')
-    speciality = TextAreaField('specility', validators=[DataRequired()])
-    role = SelectField('roles', choices=ROLES)
-    login = StringField('login', validators=[DataRequired()])
-    password = StringField('password', validators=[Optional()])
-    selector = BooleanField("ИЗМЕНИТЬ ЛОГИН ИЛИ ПАРОЛЬ")
+    id_ = None
+    lastname = StringField('ФАМИЛИЯ', validators=[DataRequired()])
+    name = StringField('ИМЯ', validators=[DataRequired()])
+    patronymic = StringField('ОТЧЕСТВО')
+    speciality = StringField('ДОЛЖНОСТЬ', validators=[DataRequired()])
+    role = SelectField('УРОВЕНЬ ДОСТУПА', coerce=str)
+    login = StringField('ЛОГИН', validators=[DataRequired()])
+    password = StringField('ПАРОЛЬ', validators=[Optional()])
+    selector = BooleanField("ИЗМЕНИТЬ ПАРОЛЬ")
     edit_btn = SubmitField("СОХРАНИТЬ ИЗМЕНЕНИЯ")
     delete_btn = SubmitField("УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ")

@@ -6,7 +6,7 @@
 {% elif req_status['name'] == "Отклонена" %}
     {% set color = "#F69595" %}
 {% elif req_status['name'] == "Отозвана" %}
-    {% set color = "#DDA8E2" %}
+    {% set color = "#f5d8f8 " %}
 {% elif req_status['name'] == "Рассмотрение" %}
     {% set color = "#E698F9" %}
 {% elif req_status['name'] == "Закрыта" %}
@@ -182,8 +182,10 @@
 {#                            <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>#}
                         </div>
                         <div class="d-flex flex-fill">
-                            <form class="d-flex gap-2 flex-fill align-items-center">
-                                <a class="btn btn-primary flex-fill" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
+                            <form class="d-flex gap-2 flex-fill align-items-center" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить заявку ?')" action="/requests/withdraw/{{ req_id }}">
+                                {% if not is_reports %}
+                                    <a class="btn btn-primary flex-fill" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
+                                {% endif %}
                                 <input class="btn btn-primary flex-fill" type="submit" value="ОТОЗВАТЬ">
                             </form>
                         </div>

@@ -17,7 +17,9 @@
         </div>
     </div>
     <div class="d-flex align-items-center gap-2">
-        <span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:{{ 'КПП' if not is_admin else 'АДМИНИСТРАТОР' }}</span>
-        <img src="{{ url_for('static', filename='img/leave_btn.svg') }}" style="width: 2em;" />
+        {% if not is_admin %}
+            <span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:{{ 'КПП' if not is_admin else 'АДМИНИСТРАТОР' }}</span>
+            <img src="{{ url_for('static', filename='img/leave_btn.svg') }}" style="width: 2em;" />
+        {% endif %}
     </div>
 </div>

@@ -6,6 +6,24 @@
         $('#selected').text($(this).text());
       });
     </script>
+
+        <script>
+        function getCookieValue(name)
+        {
+          const regex = new RegExp(`(^| )${name}=([^;]+)`)
+          const match = document.cookie.match(regex)
+          if (match) {
+            return match[2]
+          }
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URL(location).searchParams;
+            const show_status = urlParams.get('show');
+            if (show_status) {
+                $('#profileModal').modal('show');
+            }
+        })
+    </script>
 {% endblock %}
 
 {% block main %}
@@ -38,7 +56,9 @@
 
 
             </div>
-            <div class="d-flex flex-fill justify-content-center align-items-center" style="height: 10%;"><button class="btn" type="button" style="background: #678aff;color: rgb(255,255,255);font-weight: 500;width: 40%;font-size: calc((1vh + 1vw) * 0.9);" data-bs-target="#createProfileModal" data-bs-toggle="modal">СОЗДАНИЕ УЧЕТНОЙ ЗАПИСИ</button></div>
+            <div class="d-flex flex-fill justify-content-center align-items-center" style="height: 10%;">
+                <button class="btn" type="button" style="background: #678aff;color: rgb(255,255,255);font-weight: 500;width: 40%;font-size: calc((1vh + 1vw) * 0.9);" data-bs-target="#createProfileModal" data-bs-toggle="modal">СОЗДАНИЕ УЧЕТНОЙ ЗАПИСИ</button>
+            </div>
         </div>
     </div>
     <div class="modal fade modal-xl" role="dialog" tabindex="-1" id="createProfileModal">
@@ -48,7 +68,7 @@
                     <h4 class="modal-title" style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;color: #d4d4d4;">СОЗДАНИЕ УЧЕТНОЙ ЗАПИСИ</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body border-0 d-flex">
-                    <form class="d-flex flex-fill" method="post">
+                    <form class="d-flex flex-fill" method="post" action="/users/">
                         {{ form.csrf_token }}
                         <div class="d-flex flex-column flex-fill gap-2">
                             <div class="d-flex flex-fill gap-2">
@@ -98,52 +118,82 @@
             </div>
         </div>
     </div>
+
+{% if form_update %}
     <div class="modal fade modal-xl" role="dialog" tabindex="-1" id="profileModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0 l">
-                    <h4 class="modal-title" style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;color: #d4d4d4;">ПРОФИЛЬ</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    <h4 class="modal-title" style="font-size: calc((1vh + 1vw) * 0.7);font-weight: 500;color: #d4d4d4;">ПРОФИЛЬ</h4>
+                    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body border-0 d-flex">
-                    <form class="d-flex flex-fill">
+                    <form class="d-flex flex-fill" method="post" action="/users/update/{{ form_update.id_ }}">
+                        {{ form_update.csrf_token }}
                         <div class="d-flex flex-column flex-fill gap-2">
                             <div class="d-flex flex-fill gap-2">
                                 <div class="col d-flex flex-column gap-2">
                                     <div class="flex-fill d-flex gap-2">
-                                        <div class="col"><label class="form-label text-uppercase fw-semibold">Фамилия</label><input class="form-control rounded-3" type="text"></div>
-                                        <div class="col"><label class="form-label text-uppercase fw-semibold">Имя</label><input class="form-control rounded-3" type="text"></div>
+                                        <div class="col">
+                                            {{ form_update.lastname.label(class="form-label text-uppercase fw-semibold") }}
+                                            {{ form_update.lastname(class="form-control rounded-3") }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form_update.name.label(class="form-label text-uppercase fw-semibold") }}
+                                            {{ form_update.name(class="form-control rounded-3") }}
+                                        </div>
                                     </div>
-                                    <div><label class="form-label text-uppercase fw-semibold">Должность</label><input class="form-control rounded-3" type="text"></div>
+                                    <div>
+                                            {{ form_update.speciality.label(class="form-label text-uppercase fw-semibold") }}
+                                            {{ form_update.speciality(class="form-control rounded-3") }}
+                                    </div>
                                     <div class="flex-fill d-flex gap-2">
-                                        <div class="col"><label class="form-label text-uppercase fw-semibold">Логин</label><input class="form-control rounded-3" type="text"></div>
-                                        <div class="col align-items-center justify-content-end d-flex">
+                                        <div class="col">
+                                            {{ form_update.login.label(class="form-label text-uppercase fw-semibold") }}
+                                            {{ form_update.login(class="form-control rounded-3") }}
+                                        </div>
+                                        <div class="col align-items-center justify-content-center d-flex">
                                             <div>
-                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Сменить пароль</label></div>
+                                                <div class="form-check">
+                                                    {{ form_update.selector(class="form-check-input", onclick="unlockPassword()") }}
+                                                    {{ form_update.selector.label(class="form-check-label") }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-4 d-flex flex-column gap-2">
                                     <div>
-                                        <div class="col"><label class="form-label text-uppercase fw-semibold">Отчество</label><input class="form-control rounded-3" type="text"></div>
-                                    </div>
-                                    <div><label class="form-label text-uppercase fw-semibold">уровень доступа</label>
-                                        <div class="dropdown flex-fill"><button class="btn btn-primary dropdown-toggle border-2" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);width: 100%;border-color: #d4d4d4;">Выберите уровень доступа</button>
-                                            <div class="dropdown-menu"><a class="dropdown-item" href="#">First Item</a><a class="dropdown-item" href="#">Second Item</a><a class="dropdown-item" href="#">Third Item</a></div>
+                                        <div class="col">
+                                             {{ form_update.patronymic.label(class="form-label text-uppercase fw-semibold") }}
+                                             {{ form_update.patronymic(class="form-control rounded-3") }}
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="col"><label class="form-label text-uppercase fw-semibold">пароль</label><input class="form-control rounded-3 border border-2 rounded-3" type="text"></div>
+                                        {{ form_update.role.label(class="form-label text-uppercase fw-semibold") }}
+                                        {{ form_update.role(class="form-select") }}
+                                    </div>
+                                    <div>
+                                        <div class="col">
+                                            {{ form_update.password.label(class="form-label text-uppercase fw-semibold") }}
+                                            {{ form_update.password(class="form-control rounded-3 password", disabled="true") }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-center gap-3 mt-5"><input class="btn border-0 btn-primary" type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ" style="background: #94fbb1;color: rgb(0,0,0);font-weight: 500;"><input class="btn border-0 btn-primary" type="submit" value="УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ" style="font-weight: 500;color: rgb(0,0,0);background: #f69595;"></div>
+                            <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
+                                {{ form_update.edit_btn(class="btn border-0 btn-primary", style="background: #94fbb1;color: rgb(0,0,0);font-weight: 500;") }}
+                                {{ form_update.delete_btn(class="btn border-0 btn-primary", style="font-weight: 500;color: rgb(0,0,0);background: #f69595;") }}
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+{% endif %}
+
+
 {% endblock %}
 
 {% block additional_scripts_end %}
@@ -169,5 +219,13 @@
             }
 
         });
+    </script>
+    <script>
+    function unlockPassword() {
+        let selector = document.getElementById("selector");
+        let password = document.querySelector(".password");
+        password.disabled = !selector.checked
+        console.log(password);
+    }
     </script>
 {% endblock %}

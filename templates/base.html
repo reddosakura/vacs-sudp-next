@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/siderbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
+    <script>
+      $('.dropdown-menu a').click(function(){
+        $('#selected').text($(this).text());
+      });
+    </script>
     {% block additional_scripts_head %}
 
 
@@ -21,10 +26,46 @@
 
     {% endblock %}
 
+    <div class="modal fade overflow-hidden" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content rounded-4 border-black border-3">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 text-m" id=userProfileModalLabel">ПРОФИЛЬ</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column justify-content-center fs-4 gap-3">
+                <div class="d-flex">
+                    {% if user['role'] %}
+                        <p class="col text-center">ПОЛЬЗОВАТЕЛЬ:<br>{{ user['lastname'].upper() }} {{ user['name'].upper() }} {{ user['patronymic'].upper() if user['patronymic'] }}</p>
+                    {% else %}
+                        <p class="col text-center bg-danger">ОШИБКА ПОЛУЧЕНИЯ ДАННЫХ</p>
+                    {% endif %}
+                    {% if user["role"]['name'] == "Суперпользователь" %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <span class="superuser-bg p-2 rounded-2">СУПЕРПОЛЬЗОВАТЕЛЬ</span></p>
+                    {% elif user["role"]['name'] == "Администратор" %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <span class="admin-bg p-2 rounded-2">АДМИНИСТРАТОР</span></p>
+                    {% elif user["role"]['name'] == "Ограниченное администрирование" %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <br><span class="limadmin-bg p-2 rounded-2">ОГРАНИЧЕННОЕ АДМИНИСТРИРОВАНИЕ</span></p>
+                    {% elif user["role"]['name'] == "Заявитель" %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <span class="requester-bg p-2 rounded-2">ЗАЯВИТЕЛЬ</span></p>
+                    {% elif user["role"]['name'] == "Охрана" %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <span class="monitoring-bg p-2 rounded-2">МОНИТОРИНГ</span></p>
+                    {% else %}
+                        <p class="col text-center">УРОВЕНЬ ДОСТУПА: <span class="monitoring-bg p-2 rounded-2">НЕТ ДАННЫХ</span></p>
+                    {% endif %}
+                </div>
+                <div class="internal-btn">
+                    <input class="rounded-4 btn w-100" type="button" onclick="window.location='/sudpapp/auth';" value="ВЫЙТИ">
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
 
     <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
     {% block additional_scripts_end %}
 
     {% endblock %}
+
 </body>
 </html>

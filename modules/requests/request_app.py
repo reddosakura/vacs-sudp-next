@@ -119,8 +119,12 @@ def create():
             flash("Не удалось определить статус заявки", "alert-danger")
             return redirect("/requests/creation")
 
+
+        print(form.errors, "<<-- error")
         if form.validate_on_submit():
+            print(form.create_btn.data, "<-- invoke")
             if form.create_btn.data:
+                print(form.create_btn.data, "<-- invoke")
                 body = {
                     "request_": {
                         "type_id": form.type.data,
@@ -180,7 +184,6 @@ def create():
                         return redirect("/requests/creation")
 
                 if form.cars_list.data:
-
                     car_types_request = build_request(
                         "http://localhost:3002/api/v3/request/car/types"
                     )
@@ -197,7 +200,7 @@ def create():
                     cars = [
                         {
                             "govern_num": c["govern_num"].replace(" ", "").upper(),
-                            "car_model": c["carmodel"],
+                            "car_model": c["car_model"],
                             "passed_status": False,
                             "type_id": car_type,
                             "request_id": submit_request.json()["id"],
@@ -547,3 +550,51 @@ def edit(id: int):
 
     return redirect("/requests")
 
+
+@reqbp.route("/withdraw/<id>", methods=["POST"])
+def withdraw(id: str):
+    get_request = build_request(
+        f'http://localhost:3002/api/v3/request/{id}'
+    )
+
+    if get_request.status_code != 200:
+        flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {get_request.status_code}", "alert-danger")
+        return render_template("pages/creator_requests.html", form=SearchForm(), requests_data=[], user={"role": None})
+
+    status = build_request(
+        f"http://localhost:3002/api/v3/request/status/{RequestStatus.WITHDRAWN.value}"
+    )
+
+    update_request_payload = {
+        "request_": {
+            "type_id": get_request.json()["type_id"],
+            "date_created": get_request.json()["date_created"],
+            "contract_name": get_request.json()["contract_name"],
+            "organization": get_request.json()["organization"],
+            "from_date": get_request.json()["from_date"],
+            "to_date": get_request.json()["to_date"],
+            "from_time": get_request.json()["from_time"],
+            "to_time": get_request.json()["to_time"],
+            "comment": get_request.json()["comment"],
+            "request_status_id": status.json()["id"],
+            "passmode_id": get_request.json()["passmode_id"],
+            "creator": get_request.json()["creator"],
+            "is_deleted": get_request.json()["is_deleted"],
+            "id": get_request.json()["id"]
+        },
+        "visitors_": get_request.json()["visitors"],
+        "cars_": get_request.json()["cars"]
+    }
+
+    update_request = build_request(
+        f"http://localhost:3002/api/v3/request/update",
+        method="PUT",
+        data=update_request_payload
+    )
+
+    if update_request.status_code != 204:
+        print(update_request.status_code)
+        flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {update_request.status_code}, ПРИ ПОПЫТКЕ ОТОЗВАТЬ ЗАЯВКУ", "alert-danger")
+        return render_template("pages/creator_requests.html", form=SearchForm(), requests_data=[], user={"role": None})
+
+    return redirect("/requests/")

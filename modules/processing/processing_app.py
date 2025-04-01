@@ -216,7 +216,7 @@ def post_approval():
 
 
 def _process_request(form: ProcessRequestForm, mode: str, user_role: str):
-    global status
+    # global status
     if form.validate_on_submit():
 
         get_request = build_request(
