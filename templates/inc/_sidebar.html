@@ -75,9 +75,12 @@
                 </a>
             </li>
         </ul>
-        <div class="d-flex align-items-center justify-content-start gap-2" data-bs-target="#userProfileModalLabel" data-bs-toggle="modal">
+        <div class="d-flex align-items-center justify-content-start gap-2">
             {% if user['name'] %}
-                <img class="p-1 {{ color }}" src="{{ url_for('static', filename='img/user-icon-role.svg') }}" style="max-height: 4.5vh;border-radius: .3em;" />
+                <div>
+                    <img class="p-1 {{ color }}" src="{{ url_for('static', filename='img/user-icon-role.svg') }}" style="max-height: 4.5vh;border-radius: .3em;" />
+
+                </div>
             {% else %}
                 <img class="p-2 error-border" src="{{ url_for('static', filename='img/exclamation-triangle-fill.svg') }}" style="max-height: 4.5vh;border-radius: .3em;" />
             {% endif %}
@@ -85,11 +88,18 @@
                 {% if user['name'] %}
                     <span class="text visually-hidden" style="font-weight: bold;font-size: calc((1vw + 1vh) * 0.55);color: rgb(0,0,0);">{{ user['lastname'] }} {{ user['name'] }} {{ user['patronymic'] if user['patronymic'] else '' }}</span>
                     <span class="text visually-hidden" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 600;">{{ user['speciality'] }}</span>
+
                 {% else %}
                     <span class="text visually-hidden" style="font-weight: bold;font-size: calc((1vw + 1vh) * 0.55);color: rgb(0,0,0);">ОШИБКА ПОЛУЧЕНИЯ ДАННЫХ</span>
                     <span class="text visually-hidden" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 600;"> НЕТ ДАННЫХ</span>
                 {% endif %}
             </div>
+            <button class="btn btn-outline-danger text visually-hidden d-flex align-items-center justify-content-center " onclick="document.cookie = `id=; SameSite=Lax;path=/`;window.location='/auth';">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+            </button>
         </div>
     </div>
     <div class="d-flex align-items-center">

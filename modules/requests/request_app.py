@@ -8,10 +8,11 @@ from flask import render_template, flash
 from datetime import datetime
 
 from flask import flash, redirect, request
+from werkzeug.security import check_password_hash
 
 from forms import RequestForm, TIME_INTERVALS, VisitorsPassageForm, SearchForm, VisitorSubForm, CarSubForm
 from .config import reqbp
-from utills.enums import RequestType, RequestStatus
+from utills.enums import RequestType, RequestStatus, Scopes
 from utills.utils import build_request
 
 
@@ -237,8 +238,14 @@ def get_my_requests():
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
         )
+        user_role = request.cookies.get("role")
         if user.status_code != 200:
             return redirect("/auth")
+
+        is_admin = False
+        if not (check_password_hash(user_role, Scopes.MONITORING.value) or
+                check_password_hash(user_role, Scopes.REQUESTER.value)):
+            is_admin = True
 
         url = f"http://localhost:3002/api/v3/request/search?&creator={request.cookies.get('id')}"
         print(url)
@@ -251,7 +258,7 @@ def get_my_requests():
             flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {requests_.status_code}", "alert-danger")
             return render_template("pages/creator_requests.html", form=form, requests_data=[], user=user.json())
 
-        return render_template("pages/creator_requests.html", form=form, requests_data=requests_.json()['requests'], user=user.json())
+        return render_template("pages/creator_requests.html", form=form, requests_data=requests_.json()['requests'], user=user.json(), is_admin=is_admin)
 
     except httpx.ConnectError:
         flash("НЕ УДАЛОСЬ СОЗДАТЬ ЗАЯВКУ. API НЕДОСТУПЕН", "alert-danger")
@@ -317,22 +324,23 @@ def edit_get(id: int):
         form.contract.data = request_.json()["contract_name"]
 
 
-        for v in request_.json()["visitors"]:
-            if not v["is_deleted"]:
-                visitor_form = VisitorSubForm()
-                visitor_form.v_id = v["id"]
-                visitor_form.lastname = v["lastname"]
-                visitor_form.name = v["name"]
-                visitor_form.patronymic = v["patronymic"]
-                form.visitors_list.append_entry(visitor_form)
-
-        for c in request_.json()["cars"]:
-            if not c["is_deleted"]:
-                car_form = CarSubForm()
-                car_form.c_id = c["id"]
-                car_form.car_model = c["car_model"]
-                car_form.govern_num = c["govern_num"]
-                form.cars_list.append_entry(car_form)
+        if request_.json()["visitors"]:
+            for v in request_.json()["visitors"]:
+                if not v["is_deleted"]:
+                    visitor_form = VisitorSubForm()
+                    visitor_form.v_id = v["id"]
+                    visitor_form.lastname = v["lastname"]
+                    visitor_form.name = v["name"]
+                    visitor_form.patronymic = v["patronymic"]
+                    form.visitors_list.append_entry(visitor_form)
+        if request_.json()["cars"]:
+            for c in request_.json()["cars"]:
+                if not c["is_deleted"]:
+                    car_form = CarSubForm()
+                    car_form.c_id = c["id"]
+                    car_form.car_model = c["car_model"]
+                    car_form.govern_num = c["govern_num"]
+                    form.cars_list.append_entry(car_form)
 
 
         return render_template("pages/request_editing.html", form=form, id=id, user=user.json(), blocked=False)
@@ -372,14 +380,11 @@ def edit(id: int):
     print(request_type, "<<-- type")
     from_date = form.from_date.data
     to_date = form.to_date.data
+
     if ((request_type == RequestType.REUSABLE.value and (to_date - from_date).days != 0)
             or (request_type == RequestType.DISPOSABLE.value and (to_date - from_date).days > 0)
             or (request_type == RequestType.DISPOSABLE.value and (
                     to_date - from_date).days == 0 and from_date.weekday() in [5, 6])):
-        # or (request_type == RequestType.DISPOSABLE.value
-        #     and (to_date - from_date).days == 0
-        # and _check_date(request, from_date))):  #TODO: доделать сервис валидации
-
         request_status = RequestStatus.APPROVE.value
     else:
         request_status = RequestStatus.CONSIDERATION.value
@@ -499,15 +504,16 @@ def edit(id: int):
         visitors_ids = [v_["v_id"] for v_ in form.visitors_list.data]
         cars_ids = [c_["c_id"] for c_ in form.cars_list.data]
 
-        for v in get_request.json()["visitors"]:
-            if v['id'] not in visitors_ids:
-                deleted_visitors.append(v | {"is_deleted": True, "date_deleted": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
-
-        for c in get_request.json()["cars"]:
-            if c['id'] not in cars_ids:
-                del c['driver']
-                del c['transport_type']
-                deleted_cars.append(c | {"is_deleted": True, "date_deleted": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
+        if get_request.json()["visitors"]:
+            for v in get_request.json()["visitors"]:
+                if v['id'] not in visitors_ids:
+                    deleted_visitors.append(v | {"is_deleted": True, "date_deleted": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
+        if get_request.json()["cars"]:
+            for c in get_request.json()["cars"]:
+                if c['id'] not in cars_ids:
+                    del c['driver']
+                    del c['transport_type']
+                    deleted_cars.append(c | {"is_deleted": True, "date_deleted": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
 
 
 
@@ -596,5 +602,10 @@ def withdraw(id: str):
         print(update_request.status_code)
         flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {update_request.status_code}, ПРИ ПОПЫТКЕ ОТОЗВАТЬ ЗАЯВКУ", "alert-danger")
         return render_template("pages/creator_requests.html", form=SearchForm(), requests_data=[], user={"role": None})
+
+    print(request.url)
+
+    if 'reports' in request.url:
+        return redirect("/reports/")
 
     return redirect("/requests/")

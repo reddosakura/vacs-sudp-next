@@ -21,4 +21,7 @@ def index():
             check_password_hash(user_role, Scopes.REQUESTER.value)):
         is_admin = True
 
+    print(is_admin)
+    # if is_admin:
+
     return render_template("pages/camera.html", user=user.json(), camera_status=True, is_admin=is_admin)

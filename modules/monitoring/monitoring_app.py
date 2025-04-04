@@ -84,12 +84,14 @@ def _close_request(request_id) -> bool | str:
 
     if get_request.json()["type"]['name'] == RequestType.DISPOSABLE.value:
         passage_counter = 0
-        for v in get_request.json()["visitors"]:
-            if v["passed_status"]: passage_counter += 1
-        for c in get_request.json()["cars"]:
-            if c["passed_status"]: passage_counter += 1
+        if get_request.json()["visitors"]:
+            for v in get_request.json()["visitors"]:
+                if v["passed_status"]: passage_counter += 1
+        if get_request.json()["cars"]:
+            for c in get_request.json()["cars"]:
+                if c["passed_status"]: passage_counter += 1
 
-        if passage_counter == (len(get_request.json()["visitors"]) + len(get_request.json()["cars"])):
+        if passage_counter == (len(get_request.json()["visitors"]) + len(get_request.json()["cars"] if get_request.json()["cars"] else [])):
 
             status = build_request(
                 f"http://localhost:3002/api/v3/request/status/{RequestStatus.CLOSED.value}"
@@ -306,16 +308,17 @@ def passage(request_id: int):
                                visitors_form=VisitorsPassageForm())
 
     cars_choices, visitors_choices = [], []
+    if get_request.json()["visitors"]:
+        for visitor in get_request.json()["visitors"]:
+            if get_request.json()["type"]["name"] == RequestType.DISPOSABLE.value and visitor["passed_status"]:
+                continue
+            visitors_choices.append((visitor['id'], f'{visitor['lastname']} {visitor['name']} {visitor['patronymic']}'))
 
-    for visitor in get_request.json()["visitors"]:
-        if get_request.json()["type"]["name"] == RequestType.DISPOSABLE.value and visitor["passed_status"]:
-            continue
-        visitors_choices.append((visitor['id'], f'{visitor['lastname']} {visitor['name']} {visitor['patronymic']}'))
-
-    for car in get_request.json()["cars"]:
-        if get_request.json()["type"]["name"] == RequestType.DISPOSABLE.value and car["passed_status"]:
-            continue
-        cars_choices.append((car['id'], f'{car['govern_num']} {car['car_model']}'))
+    if get_request.json()["cars"]:
+        for car in get_request.json()["cars"]:
+            if get_request.json()["type"]["name"] == RequestType.DISPOSABLE.value and car["passed_status"]:
+                continue
+            cars_choices.append((car['id'], f'{car['govern_num']} {car['car_model']}'))
 
     visitors_form.visitors_check_group.choices = visitors_choices
     cars_form.cars_check_group.choices = cars_choices

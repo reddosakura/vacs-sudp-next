@@ -5,21 +5,36 @@
         {% endif %}
     </div>
     <div class="d-flex p-0 m-0">
-        <div class="d-flex flex-fill justify-content-center align-items-center">
-{#            <input id="type-0" class="btn-check " type="radio" name="type-0" onclick="window.location='/monitoring'"/>#}
-{#            <label class="flex-fill btn radio-outlined-color" for="type-0" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</label>#}
-            <a href="/monitoring/" class="btn {{ 'active' if not camera_status }}" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</a>
-        </div>
-        <div class="d-flex flex-fill justify-content-center align-items-center">
-{#            <input id="type-1" class="btn-check " type="radio" name="type-1" {{ 'checked' if camera_status }} onclick="window.location='/camera'"/>#}
-{#            <label class="flex-fill btn radio-outlined-color" for="type-1" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</label>#}
-            <a href="/camera/" class="btn {{ 'active' if camera_status }}" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</a>
-        </div>
+        {% if user %}
+            {% if user['role']['name'] == 'Охрана' %}
+                    <div class="d-flex flex-fill justify-content-center align-items-center">
+            {#            <input id="type-0" class="btn-check " type="radio" name="type-0" onclick="window.location='/monitoring'"/>#}
+            {#            <label class="flex-fill btn radio-outlined-color" for="type-0" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</label>#}
+                        <a href="/monitoring/" class="btn {{ 'active' if not camera_status }}" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">ПРОПУСК</a>
+                    </div>
+                    <div class="d-flex flex-fill justify-content-center align-items-center">
+            {#            <input id="type-1" class="btn-check " type="radio" name="type-1" {{ 'checked' if camera_status }} onclick="window.location='/camera'"/>#}
+            {#            <label class="flex-fill btn radio-outlined-color" for="type-1" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</label>#}
+                        <a href="/camera/" class="btn {{ 'active' if camera_status }}" style="font-size: calc((1vw + 1vh) * 0.5);font-weight: 500;">МОНИТОРИНГ</a>
+                    </div>
+                {% endif %}
+        {% endif %}
+
     </div>
     <div class="d-flex align-items-center gap-2">
         {% if not is_admin %}
-            <span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:{{ 'КПП' if not is_admin else 'АДМИНИСТРАТОР' }}</span>
-            <img src="{{ url_for('static', filename='img/leave_btn.svg') }}" style="width: 2em;" />
+            {% if user %}
+                <span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ: {{ user['lastname'] }} {{ user['name'] }} {{ user['patronymic'] if user['patronymic'] else '' }} </span>
+            {% else %}
+                <span style="font-size: calc((1vw + 1vh) * 0.5);font-weight: bold;color: #d4d4d4;">ПРОФИЛЬ:{{ 'КПП' if not is_admin else 'АДМИНИСТРАТОР' }}</span>
+            {% endif %}
+                <button class="btn btn-outline-danger d-flex align-items-center justify-content-center " onclick="document.cookie = `id=; SameSite=Lax;path=/`;window.location='/auth';">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                      <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                    </svg>
+                </button>
+{#            <img src="{{ url_for('static', filename='img/leave_btn.svg') }}" style="width: 2em;" />#}
         {% endif %}
     </div>
 </div>

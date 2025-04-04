@@ -226,7 +226,7 @@ def update_user(id: str):
         elif form.delete_btn.data:
 
             user = build_request(
-                f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
+                f"http://localhost:3001/api/v3/users/{id}"
             )
 
             if user.status_code != 200:
@@ -268,6 +268,8 @@ def update_user(id: str):
                 form=CreateUserForm()
             )
 
+        if form.delete_btn.data:
+            return redirect(f"/users")
 
     return redirect(f"/users/{id}?show=true")
 

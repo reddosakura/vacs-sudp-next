@@ -2,8 +2,12 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <div class="d-flex flex-fill pb-2 pt-2 pe-2 gap-2">
+    <div class="d-flex flex-fill pb-2 pt-2 pe-2 {{ 'p-2 flex-column' if not is_admin }} gap-2">
+    {% if is_admin %}
         {% include 'inc/_sidebar.html' %}
+    {% else %}
+        {% include 'inc/_monitoring_panel.html' %}
+    {% endif %}
         <div class="d-flex flex-fill flex-column gap-3">
 
             {% with messages = get_flashed_messages() %}

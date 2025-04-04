@@ -6,8 +6,13 @@
 {% endblock %}
 
 {% block main %}
-	<div class="flex-fill d-flex gap-2 pt-2 pb-2 pe-2">
-    {% include 'inc/_sidebar.html' %}
+	<div class="flex-fill d-flex gap-2 pt-2 pb-2 pe-2 {{ 'flex-column p-2' if user['role']['name'] == 'Заявитель' }}">
+    {% if user['role']['name'] == 'Заявитель' %}
+        {% include 'inc/_monitoring_panel.html' %}
+    {% else %}
+        {% include 'inc/_sidebar.html' %}
+    {% endif %}
+
         <form class="flex-fill d-flex" method="POST" onsubmit="return validateForm()" >
             {{ form.csrf_token }}
             <div class="d-flex flex-fill flex-column p-2 border border-2 rounded-3">

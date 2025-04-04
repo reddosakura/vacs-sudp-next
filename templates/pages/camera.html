@@ -6,7 +6,9 @@
 
 {% block main %}
 
+    {% if is_admin %}
     {% include 'inc/_sidebar.html' %}
+    {% endif %}
 
     <div class="d-flex flex-fill p-2 gap-2">
         <div class="d-flex flex-fill flex-column">
