@@ -12,7 +12,7 @@ cd sudp-api-sync
 
 Запуск ядра системы производится данной командой:
 ```
-docker compose up -d
+docker compose --profile prod  up -d
 ```
 Развертывание СУБД PostgreSQL и структуры базы данных произойдет автоматически
 
