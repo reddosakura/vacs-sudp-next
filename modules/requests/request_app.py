@@ -1,7 +1,9 @@
-from pprint import pprint
+import os
+import uuid
+# from pprint import pprint
 
 import httpx
-from flask import render_template, flash
+from flask import render_template, send_file
 # from forms import RequestForm
 # from modules.requests.config import reqbp
 # from utills.utils import build_request
@@ -9,12 +11,19 @@ from datetime import datetime
 
 from flask import flash, redirect, request
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
-from forms import RequestForm, TIME_INTERVALS, VisitorsPassageForm, SearchForm, VisitorSubForm, CarSubForm
-from .config import reqbp
+from forms import RequestForm, TIME_INTERVALS, SearchForm, VisitorSubForm, CarSubForm
+from .config import reqbp, UPLOAD_FOLDER
 from utills.enums import RequestType, RequestStatus, Scopes
 from utills.utils import build_request
 
+
+@reqbp.route('/file/<filename>', methods=['GET'])
+def files(filename: str):
+    return send_file(
+        UPLOAD_FOLDER + filename, mimetype='application/pdf'
+    )
 
 @reqbp.route('/creation', methods=['GET'])
 def create_get():
@@ -98,7 +107,6 @@ def create():
         from_date = form.from_date.data
         to_date = form.to_date.data
         request_type = list(filter(lambda x: x['id'] == form.type.data, types_request.json()["types"]))[0]["name"]
-        print(request_type, "<<-- type")
 
         if ((request_type == RequestType.REUSABLE.value and (to_date - from_date).days != 0)
                 or (request_type == RequestType.DISPOSABLE.value and (to_date - from_date).days > 0)
@@ -120,12 +128,12 @@ def create():
             flash("Не удалось определить статус заявки", "alert-danger")
             return redirect("/requests/creation")
 
+        print(form.data)
+
 
         print(form.errors, "<<-- error")
         if form.validate_on_submit():
-            print(form.create_btn.data, "<-- invoke")
             if form.create_btn.data:
-                print(form.create_btn.data, "<-- invoke")
                 body = {
                     "request_": {
                         "type_id": form.type.data,
@@ -155,7 +163,29 @@ def create():
                           "alert-danger")
                     return redirect("/requests/creation")
 
-                print(submit_request.json(), "<<-- created_request")
+                if form.add_files_btn.data:
+                    files = []
+                    for file in form.add_files_btn.data:
+                        filename = str(uuid.uuid4().time) + "." + secure_filename(file.filename)
+
+                        file.save(os.path.join(UPLOAD_FOLDER, filename))
+                        files.append({
+                            'path': filename,
+                            "request_id": submit_request.json()["id"]
+                        })
+
+                    print(files, "<<-- files")
+                    add_files = build_request(
+                        "http://localhost:3002/api/v3/request/create/files",
+                        method="POST",
+                        data=files
+                    )
+
+                    if add_files.status_code != 200:
+                        flash(
+                            f"Не удалось прикрепить файлы к завке. Сервис API вернул код: {add_files.status_code}",
+                            "alert-danger")
+                        return redirect("/requests/creation")
 
                 if form.visitors_list.data:
                     visitors = [
@@ -248,7 +278,7 @@ def get_my_requests():
             is_admin = True
 
         url = f"http://localhost:3002/api/v3/request/search?&creator={request.cookies.get('id')}"
-        print(url)
+
         requests_ = build_request(
             url
         )

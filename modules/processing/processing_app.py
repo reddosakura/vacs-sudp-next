@@ -60,7 +60,6 @@ def consider():
         )
 
 
-
         if content.status_code != 200:
             flash(f"Сервис заявок вернул некорректный код: {content.status_code}")
             return render_template("pages/processing.html",
@@ -73,8 +72,6 @@ def consider():
                                    user=user.json(),
                                    form=ProcessRequestForm()
                                    )
-        # pprint(response.json()['requests'], sort_dicts=False)
-
         return render_template("pages/processing.html",
                                requests=response.json()['requests'],
                                mode="consider",

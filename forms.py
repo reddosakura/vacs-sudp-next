@@ -182,7 +182,8 @@ class UpdateRequestForm(FlaskForm):
     visitor = FieldList(FormField(VisitorSubForm))
     car = FieldList(FormField(CarSubForm))
     create_btn = SubmitField('СОХРАНИТЬ ИЗМЕНЕНИЯ')
-    add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
+    # add_files_btn = MultipleFileField(validators=[FileAllowed(['pdf'], 'Только pdf')])
+    add_files_btn = MultipleFileField()
 
 
 class CreateUserForm(FlaskForm):

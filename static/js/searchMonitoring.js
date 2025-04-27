@@ -41,10 +41,8 @@ $search.addEventListener('input', (event) => {
     document.cookie = `search_value=${searchText}; SameSite=Lax;`;
 
     for (let i = 0; i < cards.length; i++) {
-       // const cell_lnp = cards[i].querySelectorAll(".cell-lnp");
         const cells_lnp = Array.from(cards[i].querySelectorAll(".cell-lnp")).map(elem => elem.textContent).join("\n");
         const cells_cars = Array.from(cards[i].querySelectorAll(".cell-cars")).map(elem => elem.textContent).join("\n");
-        // const cells_cars = Array.from(cards[i].querySelector(".cell-cars"));
         const cell_contract = cards[i].querySelector(".cell-contract");
         const cell_organisation = cards[i].querySelector(".cell-organisation");
 
