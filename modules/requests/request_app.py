@@ -1,3 +1,4 @@
+import _io
 import os
 import uuid
 # from pprint import pprint
@@ -27,7 +28,10 @@ def files(filename: str):
 
 @reqbp.route('/creation', methods=['GET'])
 def create_get():
-    form = RequestForm()
+
+    search_form = SearchForm(request.args)
+    from_request = request.args.get('from_request')
+    # print(, "<-- req args")
     try:
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
@@ -43,37 +47,103 @@ def create_get():
             "http://localhost:3002/api/v3/req/types"
         )
 
-        if passmodes_request.status_code == 200 and types_request.status_code == 200:
+        url = f"http://localhost:3002/api/v3/request/search?&creator={request.cookies.get('id')}"
 
+
+        if search_form.search_submit.data:
+            url = f"{url}&value={search_form.search_field.data}"
+
+        user_requests = build_request(
+            url
+        )
+
+
+        if passmodes_request.status_code == 200 and types_request.status_code == 200 and user_requests.status_code == 200:
+            form = RequestForm()
             form.type.choices = [(type['id'], type['name']) for type in types_request.json()['types']]
             form.passage_mode.choices = [(type['id'], type['name']) for type in passmodes_request.json()['passage_modes']]
+
+            if from_request:
+                print("from request spotted")
+                request_ = build_request(
+                    f"http://localhost:3002/api/v3/request/{from_request}"
+                )
+                for t in form.type.choices:
+                    if t[0] == request_.json()["type_id"]:
+                        form.type.data = t[0]
+                        break
+
+                for p in form.passage_mode.choices:
+                    if p[0] == request_.json()["passmode_id"]:
+                        form.passage_mode.data = p[0]
+                        break
+
+                interval = f"С {datetime.strptime(request_.json()["from_time"], "%H:%M:%S").strftime("%H:%M")} ДО {datetime.strptime(request_.json()["to_time"], "%H:%M:%S").strftime("%H:%M")}"
+
+                for i in dict(TIME_INTERVALS):
+                    if (dict(TIME_INTERVALS)[i] == interval or
+                            ((dict(TIME_INTERVALS)[i] == "КРУГЛОСУТОЧНО") and
+                             (interval == "С 00:00 ДО 23:59"))):
+                        form.time_interval.data = i
+                        break
+
+                form.organization.data = request_.json()["organization"]
+                form.comment.data = request_.json()["comment"]
+                form.from_date.data = datetime.strptime(request_.json()["from_date"], "%Y-%m-%dT%H:%M:%S")
+                form.to_date.data = datetime.strptime(request_.json()["to_date"], "%Y-%m-%dT%H:%M:%S")
+                form.contract.data = request_.json()["contract_name"]
+
+                if request_.json()["visitors"]:
+                    for v in request_.json()["visitors"]:
+                        if not v["is_deleted"]:
+                            visitor_form = VisitorSubForm()
+                            visitor_form.v_id = v["id"]
+                            visitor_form.lastname = v["lastname"]
+                            visitor_form.name = v["name"]
+                            visitor_form.patronymic = v["patronymic"]
+                            form.visitors_list.append_entry(visitor_form)
+                if request_.json()["cars"]:
+                    for c in request_.json()["cars"]:
+                        if not c["is_deleted"]:
+                            car_form = CarSubForm()
+                            car_form.c_id = c["id"]
+                            car_form.car_model = c["car_model"]
+                            car_form.govern_num = c["govern_num"]
+                            form.cars_list.append_entry(car_form)
 
             return render_template(
                 "pages/request_creation.html",
                 form=form,
+                search_form=search_form,
+                search_value=search_form.search_field.data,
                 passmodes=passmodes_request.json()['passage_modes'],
                 user=user.json(),
                 types=types_request.json()['types'],
+                user_requests=user_requests.json()['requests'],
                 blocked=False
             )
 
         flash("Не удалось получить типы заявок и режимы прохода", "alert-danger")
         return render_template(
             "pages/request_creation.html",
-            form=form,
+            form=RequestForm(),
+            search_form=search_form,
             passmodes=[],
             types=[],
             user=user.json(),
+            user_requests=[],
             blocked=True
         )
     except httpx.ConnectError as e:
         flash("Ошибка при подключении к сервису заявок", "alert-danger")
         return render_template(
             "pages/request_creation.html",
-            form=form,
+            form=RequestForm(),
+            search_form=search_form,
             passmodes=[],
             types=[],
             user={"role": {"name": None}},
+            user_requests=[],
             blocked=True
         )
 
@@ -131,7 +201,7 @@ def create():
         print(form.data)
 
 
-        print(form.errors, "<<-- error")
+        # print(form.errors, "<<-- error")
         if form.validate_on_submit():
             if form.create_btn.data:
                 body = {
@@ -166,27 +236,30 @@ def create():
                 if form.add_files_btn.data:
                     files = []
                     for file in form.add_files_btn.data:
-                        filename = str(uuid.uuid4().time) + "." + secure_filename(file.filename)
+                        if file.filename:
+                            filename = str(uuid.uuid4().time) + "." + secure_filename(file.filename)
 
-                        file.save(os.path.join(UPLOAD_FOLDER, filename))
-                        files.append({
-                            'path': filename,
-                            "request_id": submit_request.json()["id"]
-                        })
+                            file.save(os.path.join(UPLOAD_FOLDER, filename))
+                            files.append({
+                                'path': filename,
+                                "request_id": submit_request.json()["id"]
+                            })
 
                     print(files, "<<-- files")
-                    add_files = build_request(
-                        "http://localhost:3002/api/v3/request/create/files",
-                        method="POST",
-                        data=files
-                    )
+                    if files:
+                        add_files = build_request(
+                            "http://localhost:3002/api/v3/request/create/files",
+                            method="POST",
+                            data=files
+                        )
 
-                    if add_files.status_code != 200:
-                        flash(
-                            f"Не удалось прикрепить файлы к завке. Сервис API вернул код: {add_files.status_code}",
-                            "alert-danger")
-                        return redirect("/requests/creation")
+                        if add_files.status_code != 200:
+                            flash(
+                                f"Не удалось прикрепить файлы к завке. Сервис API вернул код: {add_files.status_code}",
+                                "alert-danger")
+                            return redirect("/requests/creation")
 
+                list_visitor_ids = []
                 if form.visitors_list.data:
                     visitors = [
                         {
@@ -214,7 +287,12 @@ def create():
                             "alert-danger")
                         return redirect("/requests/creation")
 
+                    print(add_visitor_request.json(), "<-- add_visitor")
+                    list_visitor_ids = [v['id'] for v in add_visitor_request.json()]
+
+
                 if form.cars_list.data:
+                    print(form.cars_list.data, "<-- cars_list data")
                     car_types_request = build_request(
                         "http://localhost:3002/api/v3/request/car/types"
                     )
@@ -235,7 +313,7 @@ def create():
                             "passed_status": False,
                             "type_id": car_type,
                             "request_id": submit_request.json()["id"],
-                            "visitor_id": None,
+                            "visitor_id": list_visitor_ids[int(c['visitor'])] if c['visitor'] else None,
                             "is_deleted": False,
                             "on_territory": False,
                             "date_deleted": None,
@@ -263,7 +341,7 @@ def create():
 
 @reqbp.route('/', methods=['GET'])
 def get_my_requests():
-    form = SearchForm()
+    form = SearchForm(request.args)
     try:
         user = build_request(
             f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
@@ -279,10 +357,15 @@ def get_my_requests():
 
         url = f"http://localhost:3002/api/v3/request/search?&creator={request.cookies.get('id')}"
 
+        if form.search_field.data:
+            url = f"{url}&value={form.search_field.data}"
+
+        if request.args.get("show_archive"):
+            url = f"http://localhost:3002/api/v3/requests/list/?&is_archived=true&creator={request.cookies.get('id')}"
+
         requests_ = build_request(
             url
         )
-
 
         if requests_.status_code != 200:
             flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {requests_.status_code}", "alert-danger")
@@ -293,6 +376,7 @@ def get_my_requests():
     except httpx.ConnectError:
         flash("НЕ УДАЛОСЬ СОЗДАТЬ ЗАЯВКУ. API НЕДОСТУПЕН", "alert-danger")
         return render_template("pages/creator_requests.html", form=form, requests_data=[], user={"role": None})
+
 
 @reqbp.route('/edit/<id>', methods=['GET'])
 def edit_get(id: int):
@@ -337,10 +421,7 @@ def edit_get(id: int):
 
         interval = f"С {datetime.strptime(request_.json()["from_time"], "%H:%M:%S").strftime("%H:%M")} ДО {datetime.strptime(request_.json()["to_time"], "%H:%M:%S").strftime("%H:%M")}"
 
-        print(interval)
-
         for i in dict(TIME_INTERVALS):
-            print(dict(TIME_INTERVALS)[i])
             if (dict(TIME_INTERVALS)[i] == interval or
                     ((dict(TIME_INTERVALS)[i] == "КРУГЛОСУТОЧНО") and
                     (interval == "С 00:00 ДО 23:59"))):
@@ -384,6 +465,8 @@ def edit(id: int):
     user = build_request(
         f"http://localhost:3001/api/v3/users/{request.cookies.get('id')}"
     )
+    if user.status_code != 200:
+        return redirect("/auth")
 
     passmodes_request = build_request(
         "http://localhost:3002/api/v3/req/passmodes"
@@ -407,7 +490,6 @@ def edit(id: int):
         return render_template("pages/request_editing.html", form=RequestForm(), id=id, user={"role": None}, blocked=False)
 
     request_type = list(filter(lambda x: x['id'] == form.type.data, types_request.json()["types"]))[0]["name"]
-    print(request_type, "<<-- type")
     from_date = form.from_date.data
     to_date = form.to_date.data
 
@@ -493,7 +575,7 @@ def edit(id: int):
                         "passed_status": False,
                         "type_id": car_type,
                         "request_id": id,
-                        "visitor_id": None,
+                        # "visitor_id": None,
                         "is_deleted": False,
                         "on_territory": False,
                         "date_deleted": None,
@@ -512,7 +594,6 @@ def edit(id: int):
                     f"Не удалось прикрепить посетителей к завке. Сервис API вернул код: {add_visitor_request.status_code}",
                     "alert-danger")
                 return redirect(f"/requests/edit/{id}")
-
 
         if additional_cars:
             add_car_request = build_request(
@@ -546,9 +627,17 @@ def edit(id: int):
                     deleted_cars.append(c | {"is_deleted": True, "date_deleted": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
 
 
+        files = []
+        if form.add_files_btn.data:
+            for file in form.add_files_btn.data:
+                if file.filename:
+                    filename = str(uuid.uuid4().time) + "." + secure_filename(file.filename)
 
-        print(updated_cars + deleted_cars)
-
+                    file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    files.append({
+                        'path': filename,
+                        "request_id": id
+                    })
 
         update_request_payload = {
             "request_":{
@@ -568,7 +657,8 @@ def edit(id: int):
                 "id": id
             },
             "visitors_": updated_visitors + deleted_visitors,
-            "cars_": updated_cars + deleted_cars
+            "cars_": updated_cars + deleted_cars,
+            "files_": files
         }
 
         update_request = build_request(
@@ -619,7 +709,62 @@ def withdraw(id: str):
             "id": get_request.json()["id"]
         },
         "visitors_": get_request.json()["visitors"],
-        "cars_": get_request.json()["cars"]
+        "cars_": get_request.json()["cars"],
+        "files_": get_request.json()["files"],
+    }
+
+    print(update_request_payload)
+
+    update_request = build_request(
+        f"http://localhost:3002/api/v3/request/update",
+        method="PUT",
+        data=update_request_payload
+    )
+
+    if update_request.status_code != 204:
+        print(update_request.status_code)
+        flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {update_request.status_code}, ПРИ ПОПЫТКЕ ОТОЗВАТЬ ЗАЯВКУ", "alert-danger")
+        return render_template("pages/creator_requests.html", form=SearchForm(), requests_data=[], user={"role": None})
+
+    print(request.url)
+
+    if 'reports' in request.url:
+        return redirect("/reports/")
+
+    return redirect("/requests/")
+
+
+@reqbp.route("/delete/<id>", methods=["POST"])
+def delete(id: str):
+    get_request = build_request(
+        f'http://localhost:3002/api/v3/request/{id}'
+    )
+
+    if get_request.status_code != 200:
+        flash(f"СЕРВИС ЗАЯВОК ВЕРНУЛ НЕКОРРЕКТНЫЙ КОД: {get_request.status_code}", "alert-danger")
+        return render_template("pages/creator_requests.html", form=SearchForm(), requests_data=[], user={"role": None})
+
+    print(get_request.json())
+    update_request_payload = {
+        "request_": {
+            "type_id": get_request.json()["type_id"],
+            "date_created": get_request.json()["date_created"],
+            "contract_name": get_request.json()["contract_name"],
+            "organization": get_request.json()["organization"],
+            "from_date": get_request.json()["from_date"],
+            "to_date": get_request.json()["to_date"],
+            "from_time": get_request.json()["from_time"],
+            "to_time": get_request.json()["to_time"],
+            "comment": get_request.json()["comment"],
+            "request_status_id": get_request.json()["request_status_id"],
+            "passmode_id": get_request.json()["passmode_id"],
+            "creator": get_request.json()["creator"],
+            "is_deleted": True,
+            "id": get_request.json()["id"]
+        },
+        "visitors_": get_request.json()["visitors"],
+        "cars_": get_request.json()["cars"],
+        "files_": get_request.json()["files"],
     }
 
     update_request = build_request(

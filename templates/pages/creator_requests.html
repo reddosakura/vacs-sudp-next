@@ -1,5 +1,17 @@
 
 {% extends 'base.html' %}
+{% block additional_scripts_head %}
+	<script>
+         document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URL(location).searchParams;
+            const show_archive = urlParams.get('show_archive');
+            console.log(show_archive);
+            if (show_archive) {
+                document.getElementById("switch_check").setAttribute("checked", "");
+            }
+        })
+    </script>
+{% endblock %}
 
 {% block main %}
     <div class="d-flex flex-fill pb-2 pt-2 pe-2 {{ 'p-2 flex-column' if not is_admin }} gap-2">
@@ -20,7 +32,7 @@
               {% endif %}
             {% endwith %}
             <div class="d-flex" style="height: 5%;">
-                <form class="d-flex flex-fill flex-column gap-2" action="/requests/search">
+                <form class="d-flex flex-fill flex-column gap-2" action="/requests">
                     <div class="d-flex flex-fill gap-2">
                         {{ form.search_field(class="form-control flex-fill border border-2 rounded-3 ps-2", style="font-weight: 500;", placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ") }}
                         {{ form.search_submit(class="btn btn-primary main-color") }}
@@ -31,37 +43,58 @@
                 <div class="d-flex gap-2 justify-content-center align-items-center">
                     <a class="btn btn-primary border border-0 align-content-center main-color" href="/requests/creation">ПЕРЕЙТИ К СОЗДАНИЮ ЗАЯВКИ</a>
                 </div>
+                <div class="d-flex default flex-column p-2 align-items-center justify-content-center" >
+                    <div class="form-switch chip d-flex justify-content-center">
+                        <input onclick="switchCheckArchive()" class="m-1 form-check-input" type="checkbox" role="switch" id="switch_check" name="switch_check">
+                        <label for="switch_check" class="align-self-center fs-5" style="font-weight: bold;">Показать архивные заявки</label>
+                    </div>
+                </div>
             </div>
             <div class="d-flex gap-2 p-2 overflow-auto border border-2 rounded-2" style="height: 85%;max-height: 85%;">
                 <div class="accordion flex-fill p-0 m-0 d-flex flex-column gap-2" role="tablist" id="accordionRequests">
                     {% for r in requests_data %}
-                    	{% with req_id=r['id'],
-                            req_type=r['type'],
-                            req_status=r['status'],
-                            req_comment = r['comment'],
-                            visitors=r['visitors'],
-                            cars=r['cars'],
-                            from_date=r['from_date'],
-                            to_date=r['to_date'],
-                            from_time=r['from_time'],
-                            to_time=r['to_time'],
-                            contract=r['contract_name'],
-                            organization=r["organization"],
-                            created_date=r["date_created"],
-                            passmode=r["passmode"],
-                            files=r["files"],
-                            approval=r["approval"],
-                            creator=r['creatorobj'] %}
-{#                        {% with req_id=r['id'] %}#}
-                                {% include 'inc/_accordion_item.html' %}
-                    	{% endwith %}
+                        {% if not r['is_deleted'] %}
+                            {% with req_id=r['id'],
+                                req_type=r['type'],
+                                req_status=r['status'],
+                                req_comment = r['comment'],
+                                visitors=r['visitors'],
+                                cars=r['cars'],
+                                from_date=r['from_date'],
+                                to_date=r['to_date'],
+                                from_time=r['from_time'],
+                                to_time=r['to_time'],
+                                contract=r['contract_name'],
+                                organization=r["organization"],
+                                created_date=r["date_created"],
+                                passmode=r["passmode"],
+                                files=r["files"],
+                                approval=r["approval"],
+                                creator=r['creatorobj'] %}
+    {#                        {% with req_id=r['id'] %}#}
+                                    {% include 'inc/_accordion_item.html' %}
+                            {% endwith %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+
+    {% for request in requests_data %}
+        {% if request['files'] %}
+            {% with files=request['files'], request_id=request['id'] %}
+                {% include 'inc/_files_modal.html'%}
+            {% endwith %}
+        {% endif %}
+
+    {% endfor %}
+
 {% endblock %}
+
 
 {% block additional_scripts_end %}
 	<script src="{{ url_for('static', filename='/js/bs-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/set_switch_trigger.js') }}"></script>
+
 {% endblock %}

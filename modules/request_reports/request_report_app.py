@@ -22,15 +22,12 @@ def index():
             return redirect("/auth")
 
         requests_ = build_request(
-            f"http://localhost:3002/api/v3/requests/list/?monitoring=false&fdate={datetime.datetime.now().date()}&tdate={datetime.datetime.now().date()}&is_filtered=false&is_consideration=false&is_approval=false&is_admin=false"
+            f"http://localhost:3002/api/v3/requests/list/"
         )
 
         if requests_.status_code != 200:
             flash('Request list not found.')
-            return render_template("pages/request_report.html", user={"role": None})
-
-        # pprint(requests_actual.json(), sort_dicts=False)
-        # print(len(requests_actual.json()['requests']))
+            return render_template("pages/request_report.html", user=user.json(), form=form)
 
         return render_template("pages/request_report.html",
                                user=user.json(),

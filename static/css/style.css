@@ -82,6 +82,27 @@
     /* transition: all 0.55s cubic-bezier(.72,.16,.24,.62); */
 }
 
+
+.default .chip .form-check-input {
+    /* --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%152, 179, 249, 1.0%29'/%3e%3c/svg%3e"); */
+    /*height: 2em;*/
+    /*width: 3.65em;*/
+    background-color: #c1c1c1;
+    /*border: solid black 0.2em;*/
+    transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),
+                background-color 0.45s cubic-bezier(.72,.16,.24,.62);
+
+}
+
+.default .chip .form-check-input:checked {
+    background-color: #678aff;
+    /*transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),*/
+    /*background-color 0.45s cubic-bezier(.72,.16,.24,.62);*/
+    transition: background-position 0.45s cubic-bezier(.72,.16,.24,.62),
+                background-color 0.45s cubic-bezier(.72,.16,.24,.62);
+    /* transition: all 0.55s cubic-bezier(.72,.16,.24,.62); */
+}
+
 .form-switch {
   padding-left: 2.5em;
 }
@@ -238,3 +259,62 @@ mark.animate {
 /*    box-shadow: none;*/
 /*    border: none;*/
 /*}*/
+
+#loading {
+  position: fixed;
+  display: flex;
+  align-items: center;
+    place-content: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  background-color: #fff;
+  z-index: 99;
+}
+
+#loading-image {
+  position: absolute;
+  top: 100px;
+  left: 240px;
+    opacity: 100%;
+  z-index: 100;
+}
+
+
+.loader {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 5px solid #678aff;
+  border-right: 5px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border-bottom: 5px solid #678aff;
+  border-left: 5px solid transparent;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mw-auto {
+    max-width: inherit !important;
+}

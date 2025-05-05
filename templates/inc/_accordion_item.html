@@ -137,8 +137,8 @@
                                                 <div class="flex-fill d-flex align-items-center ps-4 border-2 border-top">
                                                     {% if car['driver'] %}
                                                     	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['driver']['lastname'] }} {{ car['driver']['name'] }} {{ car['driver']['patronymic'] if car['driver']['patronymic'] }}</span>
-{#                                                    {% else %}#}
-{#                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>#}
+                                                    {% else %}
+                                                    	<span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>
                                                     {% endif %} 
 
                                                 </div>
@@ -180,14 +180,35 @@
 {#                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>#}
 {#                                </svg></div>#}
 {#                            <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>#}
+
+                            {% if files %}
+                                <div class="d-flex align-items-center justify-content-center border rounded-3" style="width: 2.5rem;height: 2.5rem;background: #678aff;" data-bs-target="#file-modal-{{ req_id }}" data-bs-toggle="modal">
+                                    <svg class="bi bi-file-earmark" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="font-size: 1.5rem;color: var(--bs-body-bg);">
+                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"></path>
+                                    </svg>
+                                </div>
+                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);" data-bs-toggle="modal" data-bs-target="#file-modal-{{ req_id }}">ОТКРЫТЬ ПРИЛОЖЕННЫЕ ФАЙЛЫ</span>
+                            {% else %}
+                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.55);">НЕТ ПРИЛОЖЕННЫХ ФАЙЛОВ</span>
+                            {% endif %}
                         </div>
                         <div class="d-flex flex-fill">
-                            <form class="d-flex gap-2 flex-fill align-items-center" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить заявку ?')" action="/requests/withdraw/{{ req_id }}">
+                        {% if req_status['name'].upper() != 'ОТОЗВАНА' %}
+                            <form class="d-flex gap-2 flex-fill align-items-center" method="post" onsubmit="return confirm('Вы уверены, что хотите отозвать заявку ?')" action="/requests/withdraw/{{ req_id }}">
                                 {% if not is_reports %}
-                                    <a class="btn btn-primary flex-fill" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
+                                    <a class="btn btn-primary flex-fill main-color" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
                                 {% endif %}
-                                <input class="btn btn-primary flex-fill" type="submit" value="ОТОЗВАТЬ">
+                                <input class="btn btn-primary flex-fill main-color" type="submit" value="ОТОЗВАТЬ">
                             </form>
+                        {% else %}
+                            <form class="d-flex gap-2 flex-fill align-items-center" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить заявку ?')" action="/requests/delete/{{ req_id }}">
+                                {% if not is_reports %}
+                                    <a class="btn btn-primary flex-fill main-color" href="/requests/edit/{{ req_id }}">РЕДАКТИРОВАТЬ</a>
+                                {% endif %}
+                                <input class="btn btn-primary flex-fill main-color" type="submit" value="УДАЛИТЬ">
+                            </form>
+                        {% endif %}
+
                         </div>
                     </div>
                 </div>

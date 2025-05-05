@@ -73,7 +73,6 @@
                             files=r["files"],
                             approval=r["approval"],
                             creator=r['creatorobj'] %}
-{#                        {% with req_id=r['id'] %}#}
                                 {% include 'inc/_accordion_item.html' %}
                     	{% endwith %}
                     {% endfor %}
@@ -82,6 +81,14 @@
             </div>
         </div>
     </div>
+
+    {% for request in requests_data %}
+        {% if request['files'] %}
+            {% with files=request['files'], request_id=request['id'] %}
+                {% include 'inc/_files_modal.html'%}
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
 {% endblock %}
 
 {% block additional_scripts_end %}

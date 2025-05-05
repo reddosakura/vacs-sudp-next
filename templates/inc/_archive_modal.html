@@ -8,567 +8,114 @@
             <div class="modal-body p-0">
                 <div class="d-flex flex-column">
                     <div class="d-flex p-2" style="height: 7vh;">
-                        <form class="flex-fill"><input class="border-2 form-control flex-fill" type="text" placeholder="ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС" /></form>
+                        <form class="flex-fill" method="get" action="/requests/creation">
+                            <div class="d-flex flex-fill gap-2">
+                                {{ search_form.search_field(class="border-2 form-control flex-fill", style="font-weight: 500;", placeholder="ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС") }}
+                                {{ search_form.search_submit(class="btn btn-primary main-color border-0") }}
+                            </div>
+                        </form>
                     </div>
                     <div class="d-flex flex-column overflow-auto p-2 gap-3" style="height: 60vh;">
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
+
+                    {% if user_requests %}
+                        {% for content in user_requests %}
+                            <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
+                                <div class="flex-fill d-flex justify-content-between">
+                                    <div class="col align-items-center d-flex">
+                                        <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №{{ content['id'] }}</span></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
+                                            <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">{{ content['creatorobj']['lastname'] }} {{ content['creatorobj']['name'][0] }}. {{ content['creatorobj']['patronymic'][0] + '.' if content['creatorobj']['patronymic'] else '' }}</span></div>
+                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">{{ content['type']['name'] }}</span></div>
+                                            <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата и время создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">{{ content['date_created']|datefilter('%H:%M %d.%m.%Y') }}</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <form class="flex-fill d-flex align-items-center" method="get" action="/requests/creation">
+                                            <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
+                                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
+                                                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
+                                                </svg>
+                                            </div>
+                                            <input type="hidden" value="{{ content['id'] }}" name="from_request" id="from_request"/>
+                                            <input type="submit" class="btn btn-primary border-0" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;" value="ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА">
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                                <div>
+                                    <div class="d-flex flex-fill gap-3">
+                                        <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
+                                            <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
+                                                {% if content['visitors'] %}
+                                                    {% for visitor in content['visitors'] %}
+                                                        {% if not visitor['is_deleted'] %}
+                                                             <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4">
+                                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ visitor['lastname'].upper() }}</span>
+                                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ visitor['name'].upper() }}</span>
+                                                                <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ visitor['patronymic'].upper() }}</span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <p>ПОСЕТИТЕЛИ НЕ ПРИКРЕПЛЕНЫ</p>
+                                                {% endif %}
+
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
+                                        <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
+                                            <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
+
+                                                {% if content['cars'] %}
+                                                    {% for car in content['cars'] %}
+                                                        {% if not car['is_deleted'] %}
+                                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
+                                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4">
+                                                                    <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">{{ car['car_model'].upper() }}</span>
+                                                                    <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">{{ car['govern_num'] }}</span>
+                                                                </div>
+                                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top">
+                                                                    {% if car['driver'] %}
+                                                                        <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">{{ car['driver']['lastname'].upper() }} {{ car['driver']['name'].upper() }} {{ car['driver']['patronymic'].upper() if car['driver']['patronymic'].upper() else '' }}</span>
+                                                                    {% else %}
+                                                                        <span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">НЕТ ДАННЫХ О ВОДИТЕЛЕ</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <p class="align-self-center">АВТОТРАНСПОРТ НЕ ПРИКРЕПЛЕН</p>
+                                                {% endif %}
+
+
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
+                                        <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
+                                            <div class="d-flex flex-column">
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">{{ content['organization'] if content['organization'] else 'БЕЗ ОРГАНИЗАЦИИ' }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">{{ content['contract_name'] if content['contract_name'] else 'БЕЗ ДОГОВОРА' }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">{{ content['passmode']['name'] }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">C {{ content['from_date']|datefilter('%d.%m.%Y') }} ПО {{ content['to_date']|datefilter('%d.%m.%Y') }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">С {{ content['from_time']|timefilter('%H:%M') }} ДО {{ content['to_time']|timefilter('%H:%M') }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shadow d-flex gap-3 flex-column p-3 rounded-4">
-                            <div class="flex-fill d-flex justify-content-between">
-                                <div class="col align-items-center d-flex">
-                                    <div class="d-flex flex-fill"><span style="font-size: calc((1vh + 1vw) * 1);font-weight: 600;">ЗАЯВКА №1</span></div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="d-flex gap-4 flex-fill align-items-center justify-content-center">
-                                        <div class="d-flex flex-column"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Заявитель</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">Е. А. ЛАТЫШЕВ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Тип заявки</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">ОДНОРАЗОВАЯ</span></div>
-                                        <div class="d-flex flex-column" style="font-size: calc((1vh + 1vw) * 0.9);"><span style="font-size: calc((1vh + 1vw) * 0.45);color: #d4d4d4;">Дата создания</span><span style="font-size: calc((1vh + 1vw) * 0.6);font-weight: 600;">01.01.2024 09:00</span></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="flex-fill d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center border-0 rounded-2" style="width: 2.5em;height: 2.5em;background: #678aff;"><svg class="bi bi-file-earmark-text m-0 p-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(255,255,255);width: 1em;height: 1em;">
-                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
-                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
-                                            </svg></div><button class="btn btn-primary border-0" type="button" style="background: rgba(13,110,253,0);color: rgb(0,0,0);font-size: calc((1vh + 1vw) * 0.5);text-align: left;font-weight: 600;">ИСПОЛЬЗОВАТЬ В КАЧЕСТВЕ ШАБЛОНА</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex flex-fill gap-3">
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">ПОСЕТИТЕЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                            <div class="border-2 d-flex flex-column justify-content-center align-items-start flex-wrap border rounded rounded-3 gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ЛОСИНО-ОСТРОВСКИЙ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАН</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ИВАНОВИЧ</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="border-0 shadow d-flex flex-column flex-grow-1 rounded-3" style="width: 50%;"><span class="fw-semibold" style="text-align: center;color: #D4D4D4;font-size: calc((1vh + 1vw) * 0.55);">АВТОМОБИЛИ</span>
-                                        <div class="d-flex flex-column p-2 overflow-auto gap-2" style="height: 35vh;">
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                            <div class="border-2 d-flex flex-column justify-content-center border rounded rounded-3 gap-1">
-                                                <div class="d-flex flex-column flex-fill justify-content-center gap-1 ps-4"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.65);">ТОЙОТА КАМРИ</span><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">А777АА77</span></div>
-                                                <div class="border-2 d-flex flex-fill align-items-center ps-4 border-top"><span style="font-weight: bold;font-size: calc((1vh + 1vw) * 0.45);">ЛОСИНО-ОСТРОВСКИЙ ИВАН ИВАНОВИЧ</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column flex-grow-1 p-2 gap-3" style="width: 50%;">
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ОРГАНИЗАЦИЯ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ДОГОВОР</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ПРОПУСК ОСУЩЕСТВЛЯТЬ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">СРОК ДЕЙСТВИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <p class="m-0 p-0" style="font-size: calc((1vh + 1vw) * 0.55);font-family: 'Golos Text', sans-serif;font-weight: bold;color: #d4d4d4;">ВРЕМЯ ДЕЙСВТИЯ ЗАЯВКИ</p><span class="border-0 shadow border rounded m-0 p-0" style="text-align: center;">Text</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
+                    {% else %}
+                    	<span class="align-self-center">ПО ДАННОМУ ЗАПРОСУ ЗАЯВОК НЕ НАЙДЕНО</span>
+                    {% endif %}
+
                     </div>
                 </div>
             </div>

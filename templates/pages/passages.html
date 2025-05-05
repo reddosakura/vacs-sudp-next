@@ -19,7 +19,6 @@
                         <div class="d-flex">
                             <div class="d-flex gap-2 m-0 flex-fill">
                                 <div class="d-flex flex-fill">
-{#                                    <input class="form-control flex-fill border border-2 rounded-3 ps-2" type="text" placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ" style="font-weight: 500;">#}
                                     {{ form.search_field(class="form-control flex-fill border border-2 rounded-3 ps-2", placeholder="ВВЕДИТЕ ПОИСКОВОЕ ЗНАЧЕНИЕ", style="font-weight: 500;") }}
                                 </div>
                             </div>
@@ -30,28 +29,23 @@
                                     <div class="d-flex gap-2">
                                         <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">С даты</span>
                                             {{ form.filter_fdate(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
-{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="date" style="text-align: center;">#}
                                         </div>
                                         <div class="d-flex flex-column"><span style="font-weight: 600;color: #d4d4d4;">По даты</span>
                                             {{ form.filter_tdate(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
-{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="date" style="text-align: center;">#}
                                         </div>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <div class="d-flex flex-column">
                                             <span style="font-weight: 600;color: #d4d4d4;">С часа</span>
                                             {{ form.filter_ftime(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
-{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="time" style="text-align: center;">#}
                                         </div>
                                         <div class="d-flex flex-column">
                                             <span style="font-weight: 600;color: #d4d4d4;">До часа</span>
                                             {{ form.filter_ttime(class="form-control border border-2 rounded-2 flex-fill m-0 p-0", style="text-align: center;") }}
-{#                                            <input class="form-control border border-2 rounded-2 flex-fill m-0 p-0" type="time" style="text-align: center;">#}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
-{#                                    {{ form.apply_button(class="btn btn-primary flex-fill m-0 main-color") }}#}
                                     <input class="btn btn-primary flex-fill m-0 main-color" type="submit" value="ПОИСК ПО УКАЗАННЫМ КРИТЕРИЯМ">
                                     <a class="btn btn-primary flex-fill m-0 bg-danger text-center align-content-center border border-0" href="/passages/">СБРОС</a>
                                 </div>

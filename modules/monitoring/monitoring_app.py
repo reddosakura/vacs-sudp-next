@@ -172,7 +172,8 @@ def _update_passage_status(form):
         update_payload = {
             "request_": None,
             "visitors_": [visitor | {"passed_status": True} for visitor in get_visitors.json()["visitors"]],
-            "cars_": None
+            "cars_": None,
+            "files_": None,
         }
 
         url = "http://localhost:3005/api/v3/passage/create"
@@ -207,21 +208,23 @@ def _update_passage_status(form):
                                    spec_form=SpecTransportForm(),
                                    visitors_form=VisitorsPassageForm())
 
+        print(get_cars.json())
         update_payload = {
             "request_": None,
             "visitors_": None,
-            "cars_": [car | {"passed_status": True, "on_territory": True} for car in get_cars.json()["cars"]]
+            "cars_": [car | {"passed_status": True, "on_territory": True} for car in get_cars.json()["cars"]],
+            "files_": None
         }
 
         url = "http://localhost:3004/api/v3/passage/create"
+
+    print(data)
 
     create_passages = build_request(
         url,
         data=data,
         method="POST"
     )
-
-    print(create_passages.status_code != 200, "<-- status")
 
     if create_passages.status_code != 200:
         flash(
@@ -231,11 +234,14 @@ def _update_passage_status(form):
                                spec_form=SpecTransportForm(),
                                visitors_form=VisitorsPassageForm())
 
+    print(update_payload)
     update_passage = build_request(
         f"http://localhost:3002/api/v3/request/update",
         method="PUT",
         data=update_payload
     )
+
+    print(update_passage.status_code)
 
     if update_passage.status_code != 204:
         flash(f"НЕ УДАЛОСЬ ОБНОВИТЬ СТАТУС ПРОХОДА, СЕРВИС ЗАЯВОК ВЕРНУЛ КОД: {update_passage.status_code}")
@@ -485,7 +491,8 @@ def process_cars_out(car_id):
     update_payload = {
         "request_": None,
         "visitors_": None,
-        "cars_": [car | {"passed_status": True, "on_territory": False} for car in get_cars.json()["cars"]]
+        "cars_": [car | {"passed_status": True, "on_territory": False} for car in get_cars.json()["cars"]],
+        "files_": None
     }
 
     update_passage = build_request(

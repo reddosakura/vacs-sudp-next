@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import httpx
 from flask import Blueprint, render_template, request, flash, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -31,6 +33,8 @@ def consider():
         response = build_request(
             "http://localhost:3002/api/v3/requests/list/?is_consideration=true"
         )
+
+        pprint(response.json(), sort_dicts=False)
 
 
         if response.status_code != 200:
@@ -293,7 +297,8 @@ def _process_request(form: ProcessRequestForm, mode: str, user_role: str):
                 "id": get_request.json()["id"]
             },
             "visitors_": get_request.json()["visitors"],
-            "cars_": get_request.json()["cars"]
+            "cars_": get_request.json()["cars"],
+            "files_": get_request.json()["files"],
         }
 
         update_request = build_request(

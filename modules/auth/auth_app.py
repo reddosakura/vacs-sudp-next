@@ -32,8 +32,8 @@ def login():
                 if auth_response.json()["authenticated"]:
                     role = auth_response.json()["role"]
                     match role:
-                        case "Администратор": page = "/processing/consider"
-                        case "Ограниченное администрирование": page = "/processing/approval"
+                        case "Администратор": page = "/processing/approval"
+                        case "Ограниченное администрирование": page = "/processing/consider"
                         case "Суперпользователь": page = "/users"
                         case "Заявитель": page = "/requests"
                         case "Охрана": page = "/monitoring"

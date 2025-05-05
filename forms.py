@@ -91,7 +91,7 @@ class CarSubForm(wtforms.Form):
     car_model = StringField('model', validators=[DataRequired()])
     govern_num = StringField('govern_num', validators=[DataRequired()])
     c_id = StringField("id")
-    # visitor = SelectField("visitor", coerce=int,  validate_choice=False)
+    visitor = SelectField("visitor", coerce=str,  validate_choice=False)
 
 
 class RequestForm(FlaskForm):
@@ -195,6 +195,15 @@ class CreateUserForm(FlaskForm):
     login = StringField('login', validators=[DataRequired()])
     password = StringField('password', validators=[DataRequired()])
     create_btn = SubmitField("СОЗДАТЬ")
+
+
+class CameraManagementForm(FlaskForm):
+    ip_address = StringField('ip_address',  validators=[DataRequired()])
+    login = StringField('login', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()])
+    place = StringField('place', validators=[DataRequired()])
+    backend_type = SelectField('backend_type', choices=[("1", "Обычный бэкенд"), ("2", "Интеллектуальный бэкенд (YOLOv11)")])
+    submit_connection = SubmitField("Добавить подключение")
 
 
 class UpdateUserForm(FlaskForm):
